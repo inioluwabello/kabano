@@ -3,6 +3,8 @@
     height: 4px;
     overflow: hidden;
     background-color: #007bff7c;
+    position: fixed;
+    top: 0;
 }
 
 .loading-bar-progress {
