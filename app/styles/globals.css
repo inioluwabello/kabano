@@ -13,4 +13,10 @@ a {
 
 * {
   box-sizing: border-box;
+  transition: all .3s ease-in;
+}
+.loading {
+  height: 100vh;
+  width: 100%;
+
 }

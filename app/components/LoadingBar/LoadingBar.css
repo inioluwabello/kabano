@@ -1,0 +1,12 @@
+.loading-bar {
+    width: 100%;
+    height: 4px;
+    overflow: hidden;
+    background-color: #007bff7c;
+}
+
+.loading-bar-progress {
+    height: 100%;
+    background-color: #007bff;
+    /* You can change the color to your desired loading bar color */
+}

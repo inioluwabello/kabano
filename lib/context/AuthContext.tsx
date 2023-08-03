@@ -3,6 +3,7 @@
 import React from "react";
 import { onAuthStateChanged, User as FirebaseAuthUser, getAuth } from "firebase/auth";
 import firebase_app from "@/lib/firebase/config";
+import LoadingBar from "@/app/components/LoadingBar/LoadingBar";
 
 const auth = getAuth(firebase_app);
 
@@ -49,9 +50,24 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({ childr
     return () => unsubscribe();
   }, []);
 
+  const [loadingPercentage, setLoadingPercentage] = React.useState(0);
+
+  // Simulate loading progress with a timer
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setLoadingPercentage((percentage) => {
+        const newPercentage = percentage + 1;
+        return newPercentage <= 100 ? newPercentage : 100;
+      });
+    }, 10);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <AuthContext.Provider value={{ user }}>
-      {loading ? <div className="loading">Loading...</div> : children}
+      {loading ?
+        <LoadingBar percentage={loadingPercentage} /> : children}
     </AuthContext.Provider>
   );
 };
