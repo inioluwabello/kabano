@@ -2,10 +2,12 @@
 import React from "react";
 import { useRouter } from 'next/navigation'
 import signUp from "@/lib/firebase/auth/sign-up";
+import { Loading } from "../components/LoadingBar/Loading";
 
 function Page() {
     const [email, setEmail] = React.useState('')
     const [password, setPassword] = React.useState('')
+    const [loading, setLoading] = React.useState(false);
     const router = useRouter()
 
     const handleForm = async (event: React.FormEvent) => {
@@ -22,9 +24,16 @@ function Page() {
         return router.push("/admin")
     }
     return (<div className="wrapper">
+        {
+            loading &&
+            <Loading />
+        }
         <div className="form-wrapper">
             <h1 className="mt-60 mb-30">Sign up</h1>
-            <form onSubmit={handleForm} className="form">
+            <form onSubmit={(e) => {
+                setLoading(true)
+                handleForm(e)
+            }} className="form">
                 <label htmlFor="email">
                     <p>Email</p>
                     <input onChange={(e) => setEmail(e.target.value)} required type="email" name="email" id="email" placeholder="example@mail.com" />

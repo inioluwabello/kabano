@@ -2,31 +2,40 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import signIn from "@/lib/firebase/auth/sign-in";
+import { Loading } from "../components/LoadingBar/Loading";
 
 function Page() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+
   const router = useRouter();
+  const [loading, setLoading] = React.useState(false);
 
   const handleForm = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    const { result, error } = await signIn(email, password);
+    const { error } = await signIn(email, password);
 
     if (error) {
       alert('Login failed')
       return console.log(error);
     }
 
-    // else successful
-    console.log(result);
     return router.push("/admin");
   };
+
   return (
     <div className="wrapper">
+      {
+        loading &&
+        <Loading />
+      }
       <div className="form-wrapper">
         <h1 className="mt-60 mb-30">Sign in</h1>
-        <form onSubmit={handleForm} className="form">
+        <form onSubmit={(e) => { 
+            setLoading(true)
+            handleForm(e)
+          }} className="form">
           <label htmlFor="email">
             <p>Email</p>
             <input

@@ -50,5 +50,5 @@ Replace with your values.
 
 Start the development server:
 ```bash
-npm start
+npm run dev
 ```
