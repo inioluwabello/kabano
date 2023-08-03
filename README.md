@@ -1,6 +1,6 @@
 # Kabano
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/yourusername/taskify/blob/main/LICENSE)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/inioluwabello/kabano/blob/main/LICENSE)
 
 Kabano is an open source task management application to help individuals and teams organize and track their tasks efficiently. With Kabano, you can easily create, edit, prioritize, and track tasks to stay on top of your work.
 
