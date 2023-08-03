@@ -21,7 +21,7 @@ function Page() {
       return console.log(error);
     }
 
-    return router.push("/admin");
+    return router.push("/boards");
   };
 
   return (

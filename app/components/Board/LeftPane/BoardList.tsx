@@ -1,4 +1,4 @@
-import { IBoard } from "@/lib/interface"
+import { IBoard } from "@/lib/interfaces"
 import { BoardListItem } from "./BoardListItem"
 
 export const BoardList = ({ boards }: { boards: IBoard[] }) => {

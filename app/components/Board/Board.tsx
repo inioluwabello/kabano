@@ -1,20 +1,17 @@
-import { IBoard } from "@/lib/interfaces";
 import { Loading } from "../LoadingBar/Loading"
 import { LeftPane } from "./LeftPane/LeftPane"
 import { RightPane } from "./RightPane/RightPane";
+import { getSelectedBoard, selectBoardStatus, selectBoards, useSelector } from "@/lib/redux";
 
-export const Board = () => {
+export const Board = ({ theme }: { theme: string }) => {
 
-    const boards: IBoard[] = [];
-    const selectedBoard: IBoard = {
-        _id: "1",
-        statuses: [],
-        title: 'New Board'
-    };
+    const boards = useSelector(selectBoards);
+    const selectedBoard = useSelector(getSelectedBoard)
+    const boardState = useSelector(selectBoardStatus)
 
     return (
-        <main className="board">
-            <Loading />
+        <main className={`board ${theme}`}>
+            {boardState === 'loading' && <Loading />}
 
             <div className="space-between">
                 <LeftPane boards={boards} />
