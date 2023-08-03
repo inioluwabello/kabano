@@ -1,8 +1,19 @@
+'use client'
+
 /* Components */
-import { Counter } from './components/Counter/Counter'
+import { useRouter } from 'next/navigation'
+import { Loading } from './components/LoadingBar/Loading'
+import { useEffect } from 'react'
 
 export default function IndexPage() {
-  return <Counter />
+
+  const router = useRouter()
+  
+  useEffect(() => {
+    router.push("/sign-in")
+  })
+
+  return <Loading />
 }
 
 export const metadata = {
