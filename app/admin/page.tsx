@@ -6,8 +6,10 @@ import { nanoid } from "nanoid";
 import addData from "@/lib/firebase/firestore/addData";
 import getDocument from "@/lib/firebase/firestore/getData";
 import { Loading } from "../components/LoadingBar/Loading";
+import { selectCount, useSelector } from "@/lib/redux";
+import { logout } from "@/lib/firebase/auth/logout";
 
-function Page() {
+export default function IndexPage() {
     const { user } = useAuthContext()
     const router = useRouter()
 
@@ -29,6 +31,8 @@ function Page() {
         alert('Data added')
     }
 
+    const counter = useSelector(selectCount)
+    
     const getData = async () => {
         setLoading(true)
         const id = "gvElbE9eHz8NKXZYWJsD8";
@@ -40,6 +44,10 @@ function Page() {
 
         setData({ ...response.result, id })
         setLoading(false)
+    }
+
+    const signOut = async () => {
+        await logout();
     }
 
     React.useEffect(() => {
@@ -69,11 +77,15 @@ function Page() {
                         <div className="id">ID: {data.id}</div>
                         <div className="name">Name: {data.name}</div>
                         <div className="house">House: {data.house}</div>
+                        <div className="counter">Redux Counter: {counter}</div>
                     </div>
                 }
+            </fieldset>
+            <br />
+
+            <fieldset>
+                <button className="logout" onClick={signOut}>Logout</button>
             </fieldset>
         </main>
     );
 }
-
-export default Page;

@@ -10,6 +10,11 @@ export interface ModalSliceState {
     isOpen: boolean
 }
 
+export interface PageSliceState {
+    theme: string;
+    isLeftPaneVisible: boolean;
+}
+
 export interface IBoard {
     _id: string;
     title: string;
@@ -44,10 +49,10 @@ export interface ISubTask {
 
 export interface NewBoardResult {
     boards: IBoard[],
-    newBoard: IBoard
+    newBoard: IBoard 
 }
 
-export interface DeleteBoardResult {
+export interface DeleteBoardResult{
     boards: IBoard[]
     deletedBoardId: string
     message: string

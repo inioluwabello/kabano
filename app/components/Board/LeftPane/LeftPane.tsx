@@ -1,8 +1,8 @@
-import { IBoard } from "@/lib/interface";
 import { Logo } from "./Logo";
 import { BoardList } from "./BoardList";
 import { LeftPaneFooter } from "./LeftPaneFooter";
 import { selectLeftPaneVisibility, useSelector } from "@/lib/redux";
+import { IBoard } from "@/lib/interfaces";
 
 export const LeftPane = ({ boards }: { boards: IBoard[] }) => {
 
