@@ -1,4 +1,45 @@
+import addData from "@/lib/firebase/firestore/addData";
+import { getCollection } from "@/lib/firebase/firestore/getData";
 import { IBoard, ITask } from "@/lib/interfaces";
+
+const BOARD_COLLECTION = 'boards'
+
+const generateBoardId = (title: string) => {
+  return title.trim().toLocaleLowerCase().replace(/ /g, '_')
+}
+
+export const putNewBoard = async (payload: { title: string; }) => {
+  try {
+    // TODO: Add boards with userId
+    const { id, data } = await addData(BOARD_COLLECTION, generateBoardId(payload.title), payload);
+    const board: IBoard = { ...data, id }
+    return board;
+  } catch (error) {
+    console.error('Error creating a new task:', error);
+    throw error;
+  }
+};
+
+export const fetchBoards = async (): Promise<IBoard[]> => {
+  try {
+    
+    // TODO: Fetch boards by userId
+    let data: any[] = (await getCollection(BOARD_COLLECTION)).result!
+    const result = data.map((e) => {
+      return { ...e.data, id: e.id }
+    })
+
+    return result;
+  } catch (error) {
+    // Handle network or other errors here
+    console.error("Error fetching boards:", error);
+    return [];
+  }
+};
+
+
+
+
 
 const API_URL = "http://localhost:3001";
 
@@ -19,27 +60,6 @@ export const fetchBoardTasks = async (id: string): Promise<ITask[]> => {
   } catch (error) {
     // Handle network or other errors here
     console.error("Error fetching board tasks:", error);
-    return [];
-  }
-};
-
-export const fetchBoards = async (): Promise<IBoard[]> => {
-  try {
-    const response = await fetch(`${API_URL}/api/boards`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    });
-
-    if (!response.ok) {
-      // Handle internal server error or other non-successful responses here
-      console.error(`Error fetching boards. Status: ${response.status}`);
-      return [];
-    }
-
-    return await response.json();
-  } catch (error) {
-    // Handle network or other errors here
-    console.error("Error fetching boards:", error);
     return [];
   }
 };
@@ -103,29 +123,6 @@ export const archiveTaskByStatus = async (payload: { boardId: string; status: st
     return remainingTasks;
   } catch (error) {
     console.error('Error deleting tasks by status:', error);
-    throw error;
-  }
-};
-
-export const putNewBoard = async (payload: { title: string; }) => {
-  try {
-    // Assuming you have a function to create a new task in your backend
-    const response = await fetch(`${API_URL}/api/boards`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        title: payload.title,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error('Error creating a new board');
-    }
-
-    const { boards, newBoard } = await response.json();
-    return { boards, newBoard };
-  } catch (error) {
-    console.error('Error creating a new task:', error);
     throw error;
   }
 };

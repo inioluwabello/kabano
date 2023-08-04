@@ -27,6 +27,16 @@ export const boardSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(createNewBoardAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(createNewBoardAsync.fulfilled, (state, action: PayloadAction<IBoard>) => {
+        state.status = 'idle';
+        state.boards.push(action.payload);
+        state.selectedBoard = action.payload
+        state.tasks = [];
+      })
+
       .addCase(getBoardsAsync.pending, (state) => {
         state.status = 'loading';
       })
@@ -36,6 +46,12 @@ export const boardSlice = createSlice({
         state.selectedBoard = state.boards[0];
       })
 
+
+
+
+
+
+      
       .addCase(getBoardTasksAsync.pending, (state) => {
         state.status = 'loading';
       })
@@ -72,16 +88,6 @@ export const boardSlice = createSlice({
         state.tasks = tasks;
       })
 
-      .addCase(createNewBoardAsync.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(createNewBoardAsync.fulfilled, (state, action: PayloadAction<NewBoardResult>) => {
-        state.status = 'idle';
-        state.boards = action.payload.boards;
-        state.selectedBoard = action.payload.newBoard
-        state.tasks = [];
-      })
-
       .addCase(deleteBoardAsync.pending, (state) => {
         state.status = 'loading';
       })
@@ -90,7 +96,7 @@ export const boardSlice = createSlice({
         state.boards = action.payload.boards;
 
         // Check if the deleted board was the selected board
-        if (state.selectedBoard && state.selectedBoard._id === action.payload.deletedBoardId) {
+        if (state.selectedBoard && state.selectedBoard.id === action.payload.deletedBoardId) {
           state.selectedBoard = undefined;
           state.tasks = [];
         }
@@ -102,7 +108,7 @@ export const boardSlice = createSlice({
       .addCase(updateTaskStatusAsync.fulfilled, (state, action: PayloadAction<ITask>) => {
         state.status = 'idle';
 
-        const taskIndex = state.tasks.findIndex((t) => t._id === action.payload._id);
+        const taskIndex = state.tasks.findIndex((t) => t.id === action.payload.id);
         if (taskIndex !== -1) {
           state.tasks[taskIndex] = action.payload
         }
@@ -124,7 +130,7 @@ export const boardSlice = createSlice({
       .addCase(deleteTaskAsync.fulfilled, (state, action) => {
         state.status = 'idle';
         const { deletedTaskId, message } = action.payload;
-        state.tasks = state.tasks.filter((f) => f._id !== deletedTaskId)
+        state.tasks = state.tasks.filter((f) => f.id !== deletedTaskId)
       })
 
       .addCase(createNewStatusAsync.pending, (state) => {

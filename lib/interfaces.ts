@@ -16,13 +16,13 @@ export interface PageSliceState {
 }
 
 export interface IBoard {
-    _id: string;
+    id: string;
     title: string;
     statuses: IStatus[];
 }
 
 export interface IStatus {
-    _id: string;
+    id: string;
     status: string;
     color: string;
     isArchived: boolean;
@@ -30,7 +30,7 @@ export interface IStatus {
 }
 
 export interface ITask {
-    _id?: string;
+    id?: string;
     title: string;
     description: string;
     dueDate?: Date;

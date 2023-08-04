@@ -1,13 +1,19 @@
+import { useEffect } from "react";
 import { Loading } from "../LoadingBar/Loading"
 import { LeftPane } from "./LeftPane/LeftPane"
 import { RightPane } from "./RightPane/RightPane";
-import { getSelectedBoard, selectBoardStatus, selectBoards, useSelector } from "@/lib/redux";
+import { getBoardsAsync, getSelectedBoard, selectBoardStatus, selectBoards, useDispatch, useSelector } from "@/lib/redux";
 
 export const Board = ({ theme }: { theme: string }) => {
 
     const boards = useSelector(selectBoards);
     const selectedBoard = useSelector(getSelectedBoard)
     const boardState = useSelector(selectBoardStatus)
+
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(getBoardsAsync())
+    }, [])
 
     return (
         <main className={`board ${theme}`}>

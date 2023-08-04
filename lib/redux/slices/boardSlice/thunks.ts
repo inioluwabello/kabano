@@ -3,6 +3,13 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { archiveTaskByStatus, deleteBoard, deleteTask, deleteTaskByStatus, fetchBoardTasks, fetchBoards, 
   putNewBoard, putNewStatus, putNewTask, updateTaskByStatus, updateTaskStatus } from './asyncTasks';
 
+export const createNewBoardAsync = createAsyncThunk(
+  "board/createNewBoardAsync",
+  async (payload: { title: string }) => {
+    return putNewBoard(payload);
+  }
+);
+
 export const getBoardsAsync = createAsyncThunk(
   "board/fetchBoardsAsync",
   async () => {
@@ -10,6 +17,28 @@ export const getBoardsAsync = createAsyncThunk(
     return response;
   }
 );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export const getBoardTasksAsync = createAsyncThunk(
   "board/fetchBoardTasksAsync",
@@ -37,13 +66,6 @@ export const archiveTaskInStatusAsync = createAsyncThunk(
   "board/archiveTaskInStatusAsync",
   async (payload: { boardId: string, status: string }) => {
     return archiveTaskByStatus(payload);
-  }
-);
-
-export const createNewBoardAsync = createAsyncThunk(
-  "board/createNewBoardAsync",
-  async (payload: { title: string }) => {
-    return putNewBoard(payload);
   }
 );
 

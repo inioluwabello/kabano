@@ -29,7 +29,7 @@ a {
   text-decoration: none;
 }* {
   box-sizing: border-box;
-  transition: all .3s ease-in;
+  transition: all .2s ease-in;
 }
 .loading {
   height: 100vh;

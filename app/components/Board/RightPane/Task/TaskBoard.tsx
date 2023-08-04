@@ -10,9 +10,9 @@ export const TaskBoard = ({ board }: { board?: IBoard }) => {
     const dispatch = useDispatch();
     useEffect(() => {
         if (board) {
-            dispatch(getBoardTasksAsync(board._id))
+            dispatch(getBoardTasksAsync(board.id))
         }
-    })
+    }, [])
 
     return (
         <div className="task-boards flex">

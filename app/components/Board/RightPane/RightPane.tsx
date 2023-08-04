@@ -3,12 +3,12 @@ import './RightPane.css'
 import { TopPane } from './TopPane'
 import { TaskBoard } from './Task/TaskBoard'
 
-export const RightPane = ({ board }: { board?: IBoard }) => {
+export const RightPane = ({ selectedBoard }: { selectedBoard?: IBoard }) => {
     return (
         <section className="right-pane">
-            <TopPane board={board} />
+            <TopPane board={selectedBoard} />
 
-            <TaskBoard board={board} />
+            <TaskBoard board={selectedBoard} />
         </section>
     )
 }

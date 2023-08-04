@@ -62,3 +62,7 @@ button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
 }
+
+.empty-board > .btn {
+    padding: 1em 2em;
+}
