@@ -61,12 +61,18 @@ a {
   padding: 0;
   display: flex;
   align-items: center;
-}.pointer {
+}
+
+.pointer {
   cursor: pointer;
 }
 
 .pry-bg {
   background: var(--main-purple);
+}
+
+.pry-bg:hover {
+  background: var(--main-purple-hover);
 }
 
 .btn {
@@ -76,10 +82,6 @@ a {
   color: #ffffff;
   font-size: 12px;
   cursor: pointer;
-}
-
-.btn:hover {
-  opacity: .5;
 }
 
 .inline-editor {

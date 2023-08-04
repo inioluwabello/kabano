@@ -4,7 +4,6 @@ import { useState } from "react";
 
 export const TopPane = ({ board }: { board?: IBoard }) => {
 
-    const selectedBoard = useSelector(getSelectedBoard)
     const [showTopBarOptions, setShowTopBarOptions] = useState(false)
 
     const dispatch = useDispatch();
@@ -15,7 +14,7 @@ export const TopPane = ({ board }: { board?: IBoard }) => {
             <div className="top-bar-actions">
                 <div className="flex ac">
                     <button className="btn btn-rnd pry-bg mr-1"
-                        disabled={board ? true : false}
+                        disabled={!board ? true : false}
                         onClick={() => dispatch(modalSlice.actions.setState(true))}
                     >+ Add New Task</button>
                     <button className="btn btn-icon plain"

@@ -34,7 +34,7 @@ export const LeftPane = ({ boards }: { boards: IBoard[] }) => {
                         <div className="leftPaneFooter">
                             <button
                                 onClick={() => toggleSidebar(true)}
-                                className="hide-sidebar-btn-sm pointer plain alt-text"
+                                className="hide-sidebar-btn-sm pry-bg pointer plain alt-text"
                                 >
                                     <img src="/assets/icon-show-sidebar.svg" alt="Logo" />
                             </button>

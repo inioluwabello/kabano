@@ -1,0 +1,14 @@
+.task-boards {
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.empty-board {
+    text-align: center;
+    margin-top: -2em;
+}
+
+.empty-board > .btn {
+    margin-top: 2em;
+}
