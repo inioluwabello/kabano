@@ -10,16 +10,17 @@ export const TopPane = ({ board }: { board?: IBoard }) => {
     const dispatch = useDispatch();
 
     return (
-        <div className={`pane topPane space-between`}>
+        <div className={`pane topPane space-between border-bottom`}>
             <h3 className={`paneTitle`}>{board ? board.title : `No Board Selected`}</h3>
             <div className="top-bar-actions">
                 <div className="flex ac">
                     <button className="btn btn-rnd pry-bg mr-1"
+                        disabled={board ? true : false}
                         onClick={() => dispatch(modalSlice.actions.setState(true))}
                     >+ Add New Task</button>
-                    <button className="btn btn-icon"
+                    <button className="btn btn-icon plain"
                         onClick={() => setShowTopBarOptions(!showTopBarOptions)}>
-                        <img src="/assets/icon-vertical-ellipsis.svg" alt="Logo" />
+                        <img style={{marginRight: "0px"}} src="/assets/icon-vertical-ellipsis.svg" alt="Logo" />
                     </button>
                 </div>
 

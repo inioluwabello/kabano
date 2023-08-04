@@ -52,4 +52,53 @@ a {
 }.board {
   height: 100vh;
   overflow: hidden;
+}.alt-text {
+  color: var(--medium-grey);
+}.plain {
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}.pointer {
+  cursor: pointer;
+}
+
+.pry-bg {
+  background: var(--main-purple);
+}
+
+.btn {
+  border: 0;
+  padding: 0.7em 1.5em;
+  border-radius: 3em;
+  color: #ffffff;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  opacity: .5;
+}
+
+.inline-editor {
+  outline: none;
+  background: none;
+  font-size: 12px;
+  border: 0;
+}.dark .border-right {
+  border-right: 1px solid #8989895c;
+}
+
+.dark .border-bottom {
+  border-bottom: 1px solid #8989895c;
+}
+
+.light .border-right {
+  border-right: 1px solid var(--lines-light);
+}
+
+.light .border-bottom {
+  border-bottom: 1px solid var(--lines-light);
 }

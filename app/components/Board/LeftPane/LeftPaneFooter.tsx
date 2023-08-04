@@ -13,7 +13,7 @@ export const LeftPaneFooter = ({ toggleSidebar }: { toggleSidebar: any }) => {
     <div className="leftPaneFooter">
       <div className="theme-toggle text-center">
         <button
-          className="switch-btn alt-text"
+          className="switch-btn alt-text plain"
           onClick={() => toggleTheme("light")}
         >
           <svg width="19" height="19" xmlns="http://www.w3.org/2000/svg">
@@ -34,7 +34,8 @@ export const LeftPaneFooter = ({ toggleSidebar }: { toggleSidebar: any }) => {
         </div>
 
         <button
-          className="switch-btn alt-text"
+          className="switch-btn alt-text plain"
+          style={{position: "relative", top: "0px"}}
           onClick={() => toggleTheme("dark")}
         >
           <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg">
@@ -48,7 +49,7 @@ export const LeftPaneFooter = ({ toggleSidebar }: { toggleSidebar: any }) => {
 
       <button
         onClick={() => toggleSidebar(false)}
-        className="hide-sidebar-btn pointer alt-text"
+        className="hide-sidebar-btn plain pointer alt-text"
       >
         <svg width="18" height="16" xmlns="http://www.w3.org/2000/svg">
           <path
@@ -56,7 +57,7 @@ export const LeftPaneFooter = ({ toggleSidebar }: { toggleSidebar: any }) => {
             fill="#828FA3"
           />
         </svg>{" "}
-        Hide Sidebar
+        <span>Hide Sidebar</span>
       </button>
     </div>
   );

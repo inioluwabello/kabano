@@ -32,6 +32,12 @@ export const BoardList = ({ boards }: { boards: IBoard[] }) => {
     }
 
     const handleBoardEnterPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Escape') {
+            setNewBoardName('')
+            setNewEditorVisibility(false)
+            return;
+        }
+
         if (newBoardName.trim() !== '' && e.key === 'Enter') {
             const payload = {
                 title: newBoardName
@@ -43,21 +49,25 @@ export const BoardList = ({ boards }: { boards: IBoard[] }) => {
     }
 
     return (
-        <div className="board-list">
+        <div className="board-list alt-text">
             <div className="list-title">ALL BOARDS ({boards.length})</div>
 
             {
                 boards.map(board => <BoardListItem key={board.title} board={board} />)
             }
 
-            <div className="new-board">
+            <div className="new-board pointer"
+                        onClick={() => {
+                            setNewEditorVisibility(true);
+                            newBoardRef.current?.focus();
+                        }}>
                 {!newBoardEditorVisible &&
                     <button
-                        onClick={() => {
-                            setNewEditorVisibility(!newBoardEditorVisible);
-                            newBoardRef.current?.focus();
-                        }}
-                        className="alt-pry-text pointer">+ Create New Board</button>}
+                        className="alt-pry-text plain new-board-btn">
+
+                        <img src="/assets/icon-board.svg" alt="Logo" />
+                        + Create New Board
+                    </button>}
                 {newBoardEditorVisible &&
                     <input
                         ref={newBoardRef}

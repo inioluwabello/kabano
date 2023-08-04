@@ -1,13 +1,32 @@
+:root {
+    --black: #000112;
+    --very-dark-grey: #20212C;
+    --dark-grey: #2B2C37;
+    --lines-dark: #3E3F4E;
+    --medium-grey: #828FA3;
+    --lines-light: #E4EBF8;
+    --light-grey: #F4F7FD;
+    --white: #FFFFFF;
+    --main-purple: #635FC7;
+    --main-purple-hover: #A8A4FF;
+    --red: #E85555;
+    --red-hover: #FF9898;
+}
 .leftPane {
     font-size: 12px;
     position: relative;
     height: 100vh;
 }
+.light .leftPane {background: var(--light-grey);}
 .mid-left-pane {
     height: calc(100vh - 53.5px);
     min-width: 250px;
     padding: 1rem;
     width: 20%;
+}
+.light .mid-left-pane,
+.light .pane {
+    background: var(--white);
 }
 .mid-left-pane.invisible{
     min-width: unset;
@@ -19,14 +38,9 @@
     width: calc(100% - 3em);
     bottom: 3em;
 }
-.border-right {
-    border-right: 1px solid #8989895c;
-}.logo-wrapper {
+.logo-wrapper {
     padding: 1em;
     height: 52.5px;
-}
-.border-bottom {
-    border-bottom: 1px solid #8989895c;
 }
 .logo > * {
     display: inline-block;
@@ -37,6 +51,96 @@
     top: -4px;
     left: 0.3em;
 }
+
 .logo {
     min-width: 134px;
+}
+
+.theme-toggle {
+    padding: 0.5em;
+    border-radius: 3px;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.theme-toggle>* {
+    display: inline-block;
+}
+
+.dark .theme-toggle {
+    background: var(--very-dark-grey);
+}
+
+.light .theme-toggle {
+    background: var(--light-grey);
+    color: var(--medium-grey);
+}
+
+.switch {
+    background: var(--main-purple);
+    width: 27px;
+    height: 14px;
+    padding: 2px;
+    border-radius: 10px;
+    position: relative;
+    top: -2px;
+    margin: 0 0.5em;
+    margin-right: 1.5em;
+    text-align: left;
+}
+
+.switch-knob {
+    background: #ffffff;
+    width: 10px;
+    height: 10px;
+    border-radius: 20px;
+    display: inline-block;
+    position: relative;
+    top: -1px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.switch-btn {
+    position: relative;
+    top: 2px;
+    padding: 3px;
+}
+
+.hide-sidebar-btn > span {
+    display: inline-block;
+}
+
+.hide-sidebar-btn-sm {
+    background: var(--main-purple);
+    padding: 1em 1.3em 1em 1em;
+    border-radius: 0 3em 3em 0;
+}
+
+.hide-sidebar-btn-sm > img {
+    margin-right: unset !important;
+}
+
+.new-board-btn {
+    color: var(--main-purple)
+}
+
+.list-title,
+.new-board {
+    padding: 1em;
+}
+
+.plain > img,
+.plain > svg {
+    margin-right: 1em;
 }
