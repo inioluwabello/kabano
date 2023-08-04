@@ -39,4 +39,17 @@ a {
 }ul {
   padding: 0;
   margin: 0;
+}.flex {
+  display: flex;
+}.space-between {
+  display: flex;
+  justify-content: space-between;
+}.board.dark {
+  background: var(--very-dark-grey);
+  color: #fff;
+}.dark .pane {
+  background: var(--dark-grey);
+}.board {
+  height: 100vh;
+  overflow: hidden;
 }

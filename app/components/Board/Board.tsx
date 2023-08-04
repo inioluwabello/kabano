@@ -13,7 +13,7 @@ export const Board = ({ theme }: { theme: string }) => {
         <main className={`board ${theme}`}>
             {boardState === 'loading' && <Loading />}
 
-            <div className="space-between">
+            <div className="flex">
                 <LeftPane boards={boards} />
                 <RightPane selectedBoard={selectedBoard} />
             </div>

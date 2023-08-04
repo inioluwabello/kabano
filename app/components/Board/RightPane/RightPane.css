@@ -1,0 +1,38 @@
+.paneTitle {
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.topPane {
+    padding: 0.7rem;
+    border-bottom: 1px solid #8989895c;
+    align-items: center;
+    height: 52.5px;
+}
+.right-pane {
+    width: 100%;
+}
+
+.topBarActions {
+    position: absolute;
+    background: #ffffff;
+    font-size: 12px;
+    width: 200px;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+    border-radius: 2px;
+    right: 5px;
+}
+
+.topBarActions>ul {
+    list-style: none;
+    padding: 0;
+}
+
+.topBarActions>ul>li {
+    padding: 1em;
+}
+
+.topBarActions>ul>li:hover {
+    padding: 1em;
+    background: var(--dark-grey-bg);
+}
