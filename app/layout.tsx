@@ -8,13 +8,13 @@ import { AuthContextProvider } from '@/lib/context/AuthContext'
 export default function RootLayout(props: React.PropsWithChildren) {
   return (
     <Providers>
-      <html lang="en">
-        <body>
-
-          <AuthContextProvider>{props.children}</AuthContextProvider>
-
-        </body>
-      </html>
+        <html lang="en">
+          <body>
+            <AuthContextProvider>
+              {props.children}
+            </AuthContextProvider>
+          </body>
+        </html>
     </Providers>
   )
 }
