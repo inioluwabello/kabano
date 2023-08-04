@@ -1,6 +1,6 @@
 import { pageSlice, selectTheme, useDispatch, useSelector } from "@/lib/redux";
 
-export const LeftPaneFooter = () => {
+export const LeftPaneFooter = ({ toggleSidebar }: { toggleSidebar: any }) => {
   const dispatch = useDispatch();
   const theme = useSelector(selectTheme);
 
@@ -9,12 +9,8 @@ export const LeftPaneFooter = () => {
     dispatch(pageSlice.actions.setTheme(newTheme));
   };
 
-  const toggleSidebar = (isVisible: boolean) => {
-    dispatch(pageSlice.actions.setLeftPaneVisibility(isVisible));
-  };
-
   return (
-    <div className="left-pane-footer">
+    <div className="leftPaneFooter">
       <div className="theme-toggle text-center">
         <button
           className="switch-btn alt-text"

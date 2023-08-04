@@ -1,4 +1,4 @@
-import { IBoard } from '@/lib/interface'
+import { IBoard } from '@/lib/interfaces'
 import './RightPane.css'
 import { TopPane } from './TopPane'
 

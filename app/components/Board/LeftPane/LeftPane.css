@@ -1,0 +1,42 @@
+.leftPane {
+    font-size: 12px;
+    position: relative;
+    height: 100vh;
+}
+.mid-left-pane {
+    height: calc(100vh - 53.5px);
+    min-width: 250px;
+    padding: 1rem;
+    width: 20%;
+}
+.mid-left-pane.invisible{
+    min-width: unset;
+    width: 0;
+    padding: 0;
+}
+.leftPaneFooter {
+    position: absolute;
+    width: calc(100% - 3em);
+    bottom: 3em;
+}
+.border-right {
+    border-right: 1px solid #8989895c;
+}.logo-wrapper {
+    padding: 1em;
+    height: 52.5px;
+}
+.border-bottom {
+    border-bottom: 1px solid #8989895c;
+}
+.logo > * {
+    display: inline-block;
+}
+.logo > h2 {
+    font-size: 1.8rem;
+    position: relative;
+    top: -4px;
+    left: 0.3em;
+}
+.logo {
+    min-width: 134px;
+}
