@@ -112,7 +112,15 @@ a {
 }
 
 .light .border-top {
-  border-top: 1px solid #8989895c;
+  border-top: 1px solid var(--lines-light);
+}
+
+.dark .border {
+  border: 1px solid #8989895c;
+}
+
+.light .border {
+  border: 1px solid var(--lines-light);
 }
 
 .red-color {
@@ -131,4 +139,36 @@ a {
 .dark .hide-sidebar-btn:hover {
   background: var(--white);
   color: var(--main-purple) !important;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.relative {
+  position: relative;
+}
+
+.error-alert {
+  position: absolute;
+  right: 0;
+  padding: 1em;
+  border: 1px solid var(--red);
+  background: var(--red-hover);
+  margin: 2em;
+  color: #ce2929;
+  border-radius: 4px;
+  box-shadow: 0 0 6px 0px var(--red-hover);
+}
+
+.link {
+  display: inline-block
+}
+
+.link:hover {
+  color: var(--main-purple);
 }

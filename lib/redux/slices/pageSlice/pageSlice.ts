@@ -1,7 +1,7 @@
 /* Core */
 import { PageSliceState } from '@/lib/interfaces'
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import { logoutAsync } from './thunks'
+import { loginAsync, logoutAsync, signUpAsync } from './thunks'
 
 
 const initialState: PageSliceState = {
@@ -28,6 +28,22 @@ export const pageSlice = createSlice({
             })
             .addCase(logoutAsync.fulfilled, (state) => {
                 state.status = 'idle';
+            })
+
+            .addCase(loginAsync.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(loginAsync.fulfilled, (state, action: PayloadAction<string>) => {
+                state.status = 'idle';
+                state.loginError = action.payload;
+            })
+
+            .addCase(signUpAsync.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(signUpAsync.fulfilled, (state, action: PayloadAction<string>) => {
+                state.status = 'idle';
+                state.signUpError = action.payload;
             })
         }
 })

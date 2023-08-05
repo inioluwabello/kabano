@@ -8,8 +8,6 @@ export const Board = ({ theme }: { theme: string }) => {
 
     const boards = useSelector(selectBoards);
     const selectedBoard = useSelector(getSelectedBoard)
-    const boardState = useSelector(selectBoardStatus)
-    const pageStatus = useSelector(selectPageStatus)
 
     const dispatch = useDispatch();
     useEffect(() => {
@@ -18,10 +16,8 @@ export const Board = ({ theme }: { theme: string }) => {
 
     return (
         <main className={`board ${theme}`}>
-            {
-                (boardState === 'loading' || pageStatus === 'loading') && 
-                <Loading />
-            }
+            
+            <Loading />
 
             <div className="flex">
                 <LeftPane boards={boards} />
