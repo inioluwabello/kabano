@@ -5,6 +5,7 @@
     background-color: #007bff7c;
     position: fixed;
     top: 0;
+    z-index: 1;
 }
 
 .loading-bar-progress {

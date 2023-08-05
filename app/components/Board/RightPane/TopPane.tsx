@@ -1,5 +1,6 @@
+import { logout } from "@/lib/firebase/auth/logout";
 import { IBoard } from "@/lib/interfaces"
-import { getSelectedBoard, modalSlice, useDispatch, useSelector } from "@/lib/redux";
+import { logoutAsync, modalSlice, useDispatch } from "@/lib/redux";
 import { useState } from "react";
 
 export const TopPane = ({ board }: { board?: IBoard }) => {
@@ -26,7 +27,12 @@ export const TopPane = ({ board }: { board?: IBoard }) => {
                 {showTopBarOptions === true && <div className="relative">
                     <div className={`topBarActions`}>
                         <ul>
-                            <li className="pointer">Archived Items</li>
+                            <li className="pointer hoverable">Archived Items</li>
+                            <li className="pointer hoverable border-top">Edit Board</li>
+                            <li className="pointer hoverable red-color">Delete Board</li>
+                            <li 
+                                onClick={() =>  dispatch(logoutAsync()) }
+                                className="pointer hoverable border-top red-color">Sign out</li>
                         </ul>
                     </div>
                 </div>

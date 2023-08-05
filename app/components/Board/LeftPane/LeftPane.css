@@ -167,15 +167,3 @@
     background: var(--main-purple);
     color: var(--white) !important;
 }
-
-.light .board-list-item:hover,
-.light .hide-sidebar-btn:hover {
-    background: var(--main-purple-10);
-    color: var(--main-purple);
-}
-
-.dark .board-list-item:hover,
-.dark .hide-sidebar-btn:hover {
-    background: var(--white);
-    color: var(--main-purple) !important;
-}
