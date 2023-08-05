@@ -26,23 +26,33 @@
     width: 100%;
 }
 
+.light .topBarActions {
+    background: var(--white);
+}
+
+.dark .topBarActions {
+    background: var(--very-dark-grey);
+}
+
 .topBarActions {
     position: absolute;
-    background: #ffffff;
     font-size: 12px;
     width: 200px;
     box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
-    border-radius: 2px;
-    right: 5px;
+    border-radius: 5px;
+    right: 2em;
+    top: 4em;
 }
 
 .topBarActions>ul {
     list-style: none;
     padding: 0;
-}
-
-.topBarActions>ul>li {
+}.topBarActions>ul>li {
     padding: 1em;
+}.topBarActions>ul>li:first-of-type {
+    border-radius: 5px 5px 0 0;
+}.topBarActions>ul>li:last-of-type {
+    border-radius: 0 0 5px 5px;
 }
 
 .topBarActions>ul>li:hover {

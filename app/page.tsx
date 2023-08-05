@@ -10,7 +10,7 @@ export default function IndexPage() {
   const router = useRouter()
   
   useEffect(() => {
-    router.push("/sign-in")
+    router.push("/auth/sign-in")
   })
 
   return <Loading />

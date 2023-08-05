@@ -1,0 +1,61 @@
+.form-wrapper {
+    width: 50%;
+}
+.illustration{
+    padding: 3em 2em;
+    width: 50%;
+    text-align: center;
+    height: 100vh;
+    align-items: center;
+    flex-direction: column;
+}
+.illustration>img {
+    width: 100%;
+    height: auto;
+    max-height: calc(100vh - 4em);
+    border-radius: 2em;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+.note {
+    font-size: 2em;
+    margin-top: 2em;
+    padding-bottom: 1em;
+}
+.form-content {
+    width: 400px;
+    margin: 0 auto;
+    text-align: center;
+    padding-top: 4em;
+}
+.form-content > p {
+    margin-top: 1em;
+    font-size: 12px;
+    line-height: 18px;
+}
+.form {
+    margin-top: 2em;
+}
+.form-content input, 
+.form-content button {
+    margin-bottom: 1em;
+    display: block;
+    padding: 1em !important;
+    outline: 0;
+    width: 100%;
+    border-radius: 2em;
+}
+.form-content input[type="password"] {
+    padding-right: 3.5em !important;
+}
+.forgot {
+    font-size: 11px;
+    margin-top: -1em;
+    margin-bottom: 2em;
+    padding: 1em;
+}
+
+.password-toggle {
+    right: 9px;
+    top: -52px;
+    padding: 0.5em;
+}

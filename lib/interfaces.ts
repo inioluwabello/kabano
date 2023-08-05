@@ -13,6 +13,9 @@ export interface ModalSliceState {
 export interface PageSliceState {
     theme: string;
     isLeftPaneVisible: boolean;
+    status: string;
+    loginError?: any;
+    signUpError?: any;
 }
 
 export interface IBoard {
