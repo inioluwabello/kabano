@@ -4,8 +4,9 @@ import { LeftPaneFooter } from "./LeftPaneFooter";
 import { pageSlice, selectLeftPaneVisibility, useDispatch, useSelector } from "@/lib/redux";
 import { IBoard } from "@/lib/interfaces";
 import './LeftPane.css'
+import { memo } from "react";
 
-export const LeftPane = ({ boards }: { boards: IBoard[] }) => {
+export const LeftPane = memo(({ boards }: { boards: IBoard[] }) => {
 
     const dispatch = useDispatch();
     const isLeftPaneVisible = useSelector(selectLeftPaneVisibility)
@@ -45,4 +46,4 @@ export const LeftPane = ({ boards }: { boards: IBoard[] }) => {
             
         </div>
     )
-}
+})

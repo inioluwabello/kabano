@@ -2,6 +2,7 @@ import { IBoard } from "@/lib/interfaces"
 import './TaskBoard.css'
 import { useEffect } from "react"
 import { getBoardTasksAsync, selectTasks, useDispatch, useSelector } from "@/lib/redux"
+import { TaskColumns } from "./TaskColumns"
 
 export const TaskBoard = ({ board }: { board?: IBoard }) => {
 
@@ -12,7 +13,7 @@ export const TaskBoard = ({ board }: { board?: IBoard }) => {
         if (board) {
             dispatch(getBoardTasksAsync(board.id))
         }
-    }, [])
+    }, [tasks])
 
     return (
         <div className="task-boards flex">
@@ -45,7 +46,7 @@ export const TaskBoard = ({ board }: { board?: IBoard }) => {
                 board &&
                 tasks &&
                 <div className="task-columns flex">
-
+                    <TaskColumns />
                 </div>
             }
         </div>

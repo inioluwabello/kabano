@@ -1,7 +1,8 @@
 import { IBoard } from "@/lib/interfaces";
 import { useDispatch } from "@/lib/redux";
+import { memo } from "react";
 
-export const BoardListItem = ({ board, selected }: { board?: IBoard, selected: boolean }) => {
+export const BoardListItem = memo(({ board, selected }: { board?: IBoard, selected: boolean }) => {
 
     const dispatch = useDispatch();
     const selectBoardHandler = () => {
@@ -22,4 +23,4 @@ export const BoardListItem = ({ board, selected }: { board?: IBoard, selected: b
             {renderBoardListItem(board!)}
         </>
     )
-}
+})

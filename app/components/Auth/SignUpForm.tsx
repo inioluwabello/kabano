@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { loginAsync, selectLoginError, selectSignUpError, signUpAsync, useDispatch, useSelector } from "@/lib/redux";
+import { selectSignUpError, signUpAsync, useDispatch, useSelector } from "@/lib/redux";
 
 export const SignUpForm = () => {
 

@@ -1,8 +1,10 @@
+'use client'
+
 import { useEffect } from "react";
 import { Loading } from "../LoadingBar/Loading"
 import { LeftPane } from "./LeftPane/LeftPane"
 import { RightPane } from "./RightPane/RightPane";
-import { getBoardsAsync, getSelectedBoard, selectBoardStatus, selectBoards, selectPageStatus, useDispatch, useSelector } from "@/lib/redux";
+import { getBoardsAsync, getSelectedBoard, selectBoards, useDispatch, useSelector } from "@/lib/redux";
 
 export const Board = ({ theme }: { theme: string }) => {
 

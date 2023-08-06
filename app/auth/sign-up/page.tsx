@@ -1,14 +1,21 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { Loading } from "../../components/LoadingBar/Loading";
 import { AuthIllustration } from "../../components/Auth/AuthIllustration";
-import { setTheme } from "@/app/util";
-import { selectTheme, useSelector } from "@/lib/redux";
+import { pageSlice, selectTheme, useDispatch, useSelector } from "@/lib/redux";
 import { SignUpForm } from "@/app/components/Auth/SignUpForm";
 import '../auth.css'
 
 function Page() {
-    setTheme();
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        // On page load, check if there's a saved theme in localStorage
+        const savedTheme = localStorage.getItem('savedTheme');
+        if (savedTheme) {
+            dispatch(pageSlice.actions.setTheme(savedTheme));
+        }
+    }, [dispatch]);
 
     const theme = useSelector(selectTheme)
 
