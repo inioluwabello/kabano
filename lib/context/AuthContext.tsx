@@ -52,7 +52,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({ childr
 
   return (
     <AuthContext.Provider value={{ user }}>
-      {loading ? <Loading /> : children}
+      {loading ? <Loading pageLoading={loading} /> : children}
     </AuthContext.Provider>
   );
 };
