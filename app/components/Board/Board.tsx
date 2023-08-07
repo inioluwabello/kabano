@@ -39,7 +39,7 @@ export const Board = () => {
     return (
         <main className={`board ${theme}`}>
             
-            <Loading />
+            <Loading pageLoading={false} />
 
             <div className="flex">
                 <LeftPane boards={boards} />

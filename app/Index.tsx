@@ -13,5 +13,5 @@ export const Index = () => {
         }
     }, []);
 
-    return (<Loading />)
+    return (<Loading pageLoading={true} />)
 }

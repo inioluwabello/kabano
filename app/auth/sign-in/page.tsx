@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Loading } from "../../components/LoadingBar/Loading";
 import { SignInForm } from "../../components/Auth/SignInForm";
 import { AuthIllustration } from "../../components/Auth/AuthIllustration";
@@ -18,13 +18,14 @@ function Page() {
   }, [dispatch]);
 
   const theme = useSelector(selectTheme)
+  const [loading, setLoading] = useState(false);
 
   return (
     <main className={`section ${theme}`}>
-      <Loading />
+      <Loading pageLoading={loading} />
 
       <div className="auth-page flex">
-        <SignInForm />
+        <SignInForm setLoading={setLoading} />
 
         <AuthIllustration />
       </div>

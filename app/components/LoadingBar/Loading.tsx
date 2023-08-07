@@ -4,7 +4,7 @@ import React from "react";
 import LoadingBar from "@/app/components/LoadingBar/LoadingBar";
 import { selectBoardStatus, selectPageStatus, useSelector } from "@/lib/redux";
 
-export const Loading = () => {
+export const Loading = ({ pageLoading }: { pageLoading: boolean }) => {
     
     const [loadingPercentage, setLoadingPercentage] = React.useState(0);
     const boardState = useSelector(selectBoardStatus)
@@ -24,7 +24,10 @@ export const Loading = () => {
 
     return (
         <>
-            { (boardState === 'loading' || pageStatus === 'loading') && <LoadingBar percentage={loadingPercentage} />}
+            {
+                (boardState === 'loading' || pageStatus === 'loading' || pageLoading === true) && 
+                <LoadingBar percentage={loadingPercentage} />
+            }
         </>
     );
 };

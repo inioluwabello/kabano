@@ -1,61 +1,50 @@
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { useRouter } from "next/navigation";
-import { loginAsync, loginWithGithubAsync, loginWithGoogleAsync, pageSlice, selectLoginError, useDispatch, useSelector } from "@/lib/redux";
+import signIn, { signInWithGitHub, signInWithGoogle } from "@/lib/firebase/auth/sign-in";
 
-export const SignInForm = () => {
+export const SignInForm = ({ setLoading }:
+    { setLoading: Dispatch<SetStateAction<boolean>> }) => {
 
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
-    const [formSubmitted, setFormSubmitted] = useState(false)
     const [passwordVisible, setPasswordVisible] = useState(false)
+    const [loginError, setError] = useState<any>(null)
 
     const router = useRouter();
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        dispatch(pageSlice.actions.resetLoginError())
-    }, [])
-    const loginError = useSelector(selectLoginError);
 
     const handleForm = async (event: React.FormEvent) => {
+        setLoading(true);
         event.preventDefault();
 
-        setFormSubmitted(true);
-
-        const payload = {
-            email: email,
-            password: password
-        }
-        await dispatch(loginAsync(payload)).then(() => {
-            if (formSubmitted && loginError) {
-                return;
-            } else {
-                router.push("/boards");
-                return;
-            }
-        })
+        const { error } = await signIn(email, password)
+        handleLoginResult(error);        
     };
 
+    const handleLoginResult = (error: any) => {
+        setLoading(false);
+        if (error) {
+            setError("Error: Login Failed")
+            setTimeout(() => {
+                setError(null)
+            }, 3000);
+            return;
+        } else {
+            setError(null)
+            router.push("/boards");
+            return;
+        }
+    }
+
     const handleGoogleSignIn = async () => {
-        await dispatch(loginWithGoogleAsync()).then(() => {
-            if (loginError) {
-                return;
-            } else {
-                router.push("/boards");
-                return;
-            }
-        })
+        setLoading(true);
+        const {error} = await signInWithGoogle();
+        handleLoginResult(error);
     }
 
     const handleGithubSignIn = async () => {
-        await dispatch(loginWithGithubAsync()).then(() => {
-            if (loginError) {
-                return;
-            } else {
-                router.push("/boards");
-                return;
-            }
-        })
+        setLoading(true);
+        const { error } = await signInWithGitHub();
+        handleLoginResult(error);
     }
 
     return (
