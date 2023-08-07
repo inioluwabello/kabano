@@ -33,7 +33,8 @@ export const NewInlineTask = ({
                             status: status,
                             description: '',
                             subTasks: [],
-                            color: generateColor()
+                            color: generateColor(),
+                            isArchived: false
                         }
                     };
 
