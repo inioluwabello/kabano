@@ -19,6 +19,9 @@ export const pageSlice = createSlice({
         },
         setLeftPaneVisibility: (state, action: PayloadAction<boolean>) => {
             state.isLeftPaneVisible = action.payload
+        },
+        resetLoginError: (state) => {
+            state.loginError = undefined;
         }
     },
     extraReducers: (builder) => {

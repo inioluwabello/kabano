@@ -13,7 +13,7 @@ export const Loading = () => {
     // Simulate loading progress with a timer
     React.useEffect(() => {
         const interval = setInterval(() => {
-            setLoadingPercentage((percentage) => {
+            setLoadingPercentage((percentage: number) => {
                 const newPercentage = percentage + 1;
                 return newPercentage <= 100 ? newPercentage : 100;
             });

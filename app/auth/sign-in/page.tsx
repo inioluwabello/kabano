@@ -23,7 +23,7 @@ function Page() {
     <main className={`section ${theme}`}>
       <Loading />
 
-      <div className="flex">
+      <div className="auth-page flex">
         <SignInForm />
 
         <AuthIllustration />
