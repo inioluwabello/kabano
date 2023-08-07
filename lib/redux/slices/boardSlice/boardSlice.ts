@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { BoardSliceState, DeleteBoardResult, IBoard, ITask, NewBoardResult } from '@/lib/interfaces';
-import { archiveTaskInStatusAsync, createNewBoardAsync, createNewStatusAsync, createNewTaskAsync, deleteBoardAsync, deleteTaskAsync, deleteTaskInStatusAsync, getBoardsAsync, getBoardTasksAsync, updateTaskByStatusAsync, updateTaskStatusAsync } from './thunks';
-
+import { BoardSliceState, IBoard, ITask } from '@/lib/interfaces';
+import { archiveMultipleTasksByStatusAsync, createNewBoardAsync, createNewStatusAsync, createNewTaskAsync, deleteMultipleTasksByStatusAsync, deleteSingleTaskAsync, getBoardsAsync, getBoardTasksAsync, updateTaskStatusByIdAsync, updateTaskStatusByStatusAsync } from './thunks';
 
 const initialState: BoardSliceState = {
   boards: [],
@@ -20,13 +19,14 @@ export const boardSlice = createSlice({
     selectBoard: (state, action: PayloadAction<IBoard | undefined>) => {
       state.selectedBoard = action.payload;
     },
-    resetBoard: (state) => {
-      state.selectedBoard = undefined;
-      state.tasks = [];
-    },
+    // resetBoard: (state) => {
+    //   state.selectedBoard = undefined;
+    //   state.tasks = [];
+    // },
   },
   extraReducers: (builder) => {
     builder
+      // BOARDS
       .addCase(createNewBoardAsync.pending, (state) => {
         state.status = 'loading';
       })
@@ -36,7 +36,18 @@ export const boardSlice = createSlice({
         state.selectedBoard = action.payload
         state.tasks = [];
       })
-
+      .addCase(createNewStatusAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(createNewStatusAsync.fulfilled, (state, action: PayloadAction<any>) => {
+        state.status = 'idle';
+        if (action.payload.success === true) {
+          if (!state.selectedBoard?.statuses) {
+            state.selectedBoard!.statuses = [];
+          }
+          state.selectedBoard?.statuses.push(action.payload.status)
+        }
+      })
       .addCase(getBoardsAsync.pending, (state) => {
         state.status = 'loading';
       })
@@ -47,11 +58,7 @@ export const boardSlice = createSlice({
       })
 
 
-
-
-
-
-      
+      // TASKS
       .addCase(getBoardTasksAsync.pending, (state) => {
         state.status = 'loading';
       })
@@ -68,78 +75,125 @@ export const boardSlice = createSlice({
         state.tasks.push(action.payload);
       })
 
-      .addCase(deleteTaskInStatusAsync.pending, (state) => {
+      .addCase(deleteSingleTaskAsync.pending, (state) => {
         state.status = 'loading';
       })
-      .addCase(deleteTaskInStatusAsync.fulfilled, (state, action) => {
+      .addCase(deleteSingleTaskAsync.fulfilled, (state, action: PayloadAction<any>) => {
         state.status = 'idle';
-        const { board, tasks } = action.payload;
-        state.selectedBoard = board;
-        state.tasks = tasks;
-      })
-
-      .addCase(archiveTaskInStatusAsync.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(archiveTaskInStatusAsync.fulfilled, (state, action) => {
-        state.status = 'idle';
-        const { board, tasks } = action.payload;
-        state.selectedBoard = board;
-        state.tasks = tasks;
-      })
-
-      .addCase(deleteBoardAsync.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(deleteBoardAsync.fulfilled, (state, action: PayloadAction<DeleteBoardResult>) => {
-        state.status = 'idle';
-        state.boards = action.payload.boards;
-
-        // Check if the deleted board was the selected board
-        if (state.selectedBoard && state.selectedBoard.id === action.payload.deletedBoardId) {
-          state.selectedBoard = undefined;
-          state.tasks = [];
+        if (action.payload.success === true) {
+          state.tasks = state.tasks.filter(t => t.id !== action.payload.taskId)
         }
       })
 
-      .addCase(updateTaskStatusAsync.pending, (state) => {
+      .addCase(updateTaskStatusByStatusAsync.pending, (state) => {
         state.status = 'loading';
       })
-      .addCase(updateTaskStatusAsync.fulfilled, (state, action: PayloadAction<ITask>) => {
+      .addCase(updateTaskStatusByStatusAsync.fulfilled, (state, action: PayloadAction<any>) => {
         state.status = 'idle';
-
-        const taskIndex = state.tasks.findIndex((t) => t.id === action.payload.id);
-        if (taskIndex !== -1) {
-          state.tasks[taskIndex] = action.payload
+        if (action.payload.success === true) {
+          const statusIndex = state.selectedBoard?.statuses.findIndex(t => t.status === action.payload.oldStatus)
+          if (statusIndex !== -1) {
+            state.selectedBoard!.statuses[statusIndex!].status = action.payload.newStatus;
+          }
         }
       })
 
-      .addCase(updateTaskByStatusAsync.pending, (state) => {
+      .addCase(updateTaskStatusByIdAsync.pending, (state) => {
         state.status = 'loading';
       })
-      .addCase(updateTaskByStatusAsync.fulfilled, (state, action) => {
+      .addCase(updateTaskStatusByIdAsync.fulfilled, (state, action: PayloadAction<any>) => {
         state.status = 'idle';
-        const { board, tasks } = action.payload;
-        state.selectedBoard = board;
-        state.tasks = tasks;
+        if (action.payload.success === true) {
+          const taskIndex = state.tasks.findIndex(t => t.id === action.payload.taskId)
+          if (taskIndex !== -1) {
+            state.tasks[taskIndex!].status = action.payload.status;
+          }
+        }
       })
 
-      .addCase(deleteTaskAsync.pending, (state) => {
+      .addCase(deleteMultipleTasksByStatusAsync.pending, (state) => {
         state.status = 'loading';
       })
-      .addCase(deleteTaskAsync.fulfilled, (state, action) => {
+      .addCase(deleteMultipleTasksByStatusAsync.fulfilled, (state, action: PayloadAction<any>) => {
         state.status = 'idle';
-        const { deletedTaskId, message } = action.payload;
-        state.tasks = state.tasks.filter((f) => f.id !== deletedTaskId)
+        if (action.payload.success === true) {
+          state.tasks = state.tasks.filter(t => t.status !== action.payload.status)
+        }
       })
 
-      .addCase(createNewStatusAsync.pending, (state) => {
+      .addCase(archiveMultipleTasksByStatusAsync.pending, (state) => {
         state.status = 'loading';
       })
-      .addCase(createNewStatusAsync.fulfilled, (state, action) => {
+      .addCase(archiveMultipleTasksByStatusAsync.fulfilled, (state, action: PayloadAction<any>) => {
         state.status = 'idle';
-        const { board } = action.payload;
-        state.selectedBoard = board;
+        if (action.payload.success === true) {
+          state.tasks = state.tasks.filter(t => t.status !== action.payload.status)
+        }
       })
+
+    
+      // .addCase(archiveTaskInStatusAsync.pending, (state) => {
+      //   state.status = 'loading';
+      // })
+      // .addCase(archiveTaskInStatusAsync.fulfilled, (state, action) => {
+      //   state.status = 'idle';
+      //   const { board, tasks } = action.payload;
+      //   state.selectedBoard = board;
+      //   state.tasks = tasks;
+      // })
+
+      // .addCase(deleteBoardAsync.pending, (state) => {
+      //   state.status = 'loading';
+      // })
+      // .addCase(deleteBoardAsync.fulfilled, (state, action: PayloadAction<DeleteBoardResult>) => {
+      //   state.status = 'idle';
+      //   state.boards = action.payload.boards;
+
+      //   // Check if the deleted board was the selected board
+      //   if (state.selectedBoard && state.selectedBoard.id === action.payload.deletedBoardId) {
+      //     state.selectedBoard = undefined;
+      //     state.tasks = [];
+      //   }
+      // })
+
+      // .addCase(updateTaskStatusAsync.pending, (state) => {
+      //   state.status = 'loading';
+      // })
+      // .addCase(updateTaskStatusAsync.fulfilled, (state, action: PayloadAction<ITask>) => {
+      //   state.status = 'idle';
+
+      //   const taskIndex = state.tasks.findIndex((t) => t.id === action.payload.id);
+      //   if (taskIndex !== -1) {
+      //     state.tasks[taskIndex] = action.payload
+      //   }
+      // })
+
+      // .addCase(updateTaskByStatusAsync.pending, (state) => {
+      //   state.status = 'loading';
+      // })
+      // .addCase(updateTaskByStatusAsync.fulfilled, (state, action) => {
+      //   state.status = 'idle';
+      //   const { board, tasks } = action.payload;
+      //   state.selectedBoard = board;
+      //   state.tasks = tasks;
+      // })
+
+      // .addCase(deleteTaskAsync.pending, (state) => {
+      //   state.status = 'loading';
+      // })
+      // .addCase(deleteTaskAsync.fulfilled, (state, action) => {
+      //   state.status = 'idle';
+      //   const { deletedTaskId, message } = action.payload;
+      //   state.tasks = state.tasks.filter((f) => f.id !== deletedTaskId)
+      // })
+
+      // .addCase(createNewStatusAsync.pending, (state) => {
+      //   state.status = 'loading';
+      // })
+      // .addCase(createNewStatusAsync.fulfilled, (state, action) => {
+      //   state.status = 'idle';
+      //   const { board } = action.payload;
+      //   state.selectedBoard = board;
+      // })
   },
 });

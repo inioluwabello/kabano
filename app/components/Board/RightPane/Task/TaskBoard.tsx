@@ -1,8 +1,9 @@
-import { IBoard } from "@/lib/interfaces"
 import './TaskBoard.css'
 import { memo, useEffect } from "react"
 import { getBoardTasksAsync, selectTasks, useDispatch, useSelector } from "@/lib/redux"
-import { TaskColumns } from "./TaskColumns"
+import { IBoard } from "@/lib/interfaces"
+import { TaskColumns } from './TaskColumns'
+import { NewTask } from './NewTask'
 
 export const TaskBoard = memo(({ board }: { board?: IBoard }) => {
 
@@ -16,37 +17,38 @@ export const TaskBoard = memo(({ board }: { board?: IBoard }) => {
     }, [])
 
     return (
-        <div className="task-boards flex">
+        <div className="task-board">
             {
-                !board && 
-                <div className="empty-board">
-                    <div className="default-message alt-text">
-                        The board is empty. 
-                        Create a new Board or select a Board to get started
-                    </div>
+                !board &&
+                <div className="empty flex">
+                    <div className="empty-board">
+                        <div className="default-message alt-text">
+                            The board is empty.
+                            Create a new Board or select a Board to get started
+                        </div>
 
-                    <button className="btn pry-bg">+ Add new Board</button>
+                        <button className="btn pry-bg">+ Add new Board</button>
+                    </div>
                 </div>
             }
-
-            {
-                board && 
-                tasks &&
-                <div className="empty-board">
-                    <div className="default-message alt-text">
-                        The board is empty.
-                        Create a column to get started
-                    </div>
-
-                    <button className="btn pry-bg">+ Add new Column</button>
-                </div>
-            }
-
             {
                 board &&
-                tasks &&
-                <div className="task-columns flex">
-                    <TaskColumns />
+                <div className={`flex ${board ? '' : 'no-selected'} task-columns`}>
+                    {
+                        board.statuses &&
+                        board.statuses!.map(status => {
+                            return (
+                                <TaskColumns key={status.status}
+                                    board={board}
+                                    tasks={tasks}
+                                    status={status}
+                                    statusArray={board.statuses!} />
+                            )
+                        })}
+
+                    <NewTask board={board} statusArray={board.statuses!} />
+
+                    <div style={{ width: "2em" }}></div>
                 </div>
             }
         </div>

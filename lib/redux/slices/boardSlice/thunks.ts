@@ -1,8 +1,10 @@
-import { ITask } from '@/lib/interfaces';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { archiveTaskByStatus, deleteBoard, deleteTask, deleteTaskByStatus, fetchBoardTasks, fetchBoards, 
-  putNewBoard, putNewStatus, putNewTask, updateTaskByStatus, updateTaskStatus } from './asyncTasks';
+import { archiveMultipleTasksByStatus, createNewStatus, deleteMultipleTasksByStatus, deleteSingleTask, fetchBoardTasks, fetchBoards, putNewBoard, putNewTask, 
+  updateTaskStatusById, 
+  updateTaskStatusByStatus } from './asyncTasks';
+import { ITask } from '@/lib/interfaces';
 
+// BOARDS
 export const createNewBoardAsync = createAsyncThunk(
   "board/createNewBoardAsync",
   async (payload: { title: string }) => {
@@ -18,96 +20,88 @@ export const getBoardsAsync = createAsyncThunk(
   }
 );
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-export const getBoardTasksAsync = createAsyncThunk(
-  "board/fetchBoardTasksAsync",
-  async (id: string) => {
-    const response = await fetchBoardTasks(id);
+export const createNewStatusAsync = createAsyncThunk(
+  "board/createNewStatusAsync",
+  async (payload: { title: string; color: string, boardId: string }) => {
+    const response = await createNewStatus(payload);
     return response;
   }
 );
 
+
+// TASKS
 export const createNewTaskAsync = createAsyncThunk(
   "board/createNewTaskAsync",
-  async (payload: { task: ITask, boardId: string }) => {
+  async (payload: {
+    boardId: string,
+    task: ITask
+  }) => {
     return putNewTask(payload);
   }
 );
 
-export const deleteTaskInStatusAsync = createAsyncThunk(
-  "board/deleteTaskInStatusAsync",
-  async (payload: { boardId: string, status: string }) => {
-    return deleteTaskByStatus(payload);
-  }
-);
-
-export const archiveTaskInStatusAsync = createAsyncThunk(
-  "board/archiveTaskInStatusAsync",
-  async (payload: { boardId: string, status: string }) => {
-    return archiveTaskByStatus(payload);
-  }
-);
-
-export const deleteBoardAsync = createAsyncThunk(
-  "board/deleteBoardAsync",
+export const getBoardTasksAsync = createAsyncThunk(
+  "board/getBoardTasksAsync",
   async (boardId: string) => {
-    const payload = {
-      boardId: boardId,
-    };
-    return deleteBoard(payload);
+    const response = await fetchBoardTasks(boardId);
+    return response;
   }
 );
 
-export const updateTaskStatusAsync = createAsyncThunk(
-  "board/updateTaskStatusAsync",
+export const deleteSingleTaskAsync = createAsyncThunk(
+  "board/deleteSingleTaskAsync",
+  async (taskId: string) => {
+    const response = await deleteSingleTask(taskId);
+    return response;
+  }
+);
+
+export const deleteMultipleTasksByStatusAsync = createAsyncThunk(
+  "board/deleteMultipleTasksByStatusAsync",
+  async (payload: { boardId: string, status: string }) => {
+    const response = await deleteMultipleTasksByStatus(payload.boardId, payload.status);
+    return response;
+  }
+);
+
+export const updateTaskStatusByStatusAsync = createAsyncThunk(
+  "board/updateTaskStatusByStatusAsync",
+  async (payload: { boardId: string, oldStatus: string, newStatus: string }) => {
+    const response = await updateTaskStatusByStatus(payload.boardId, payload.oldStatus, payload.newStatus);
+    return response;
+  }
+);
+
+export const updateTaskStatusByIdAsync = createAsyncThunk(
+  "board/updateTaskByIdAsync",
   async (payload: { taskId: string, status: string }) => {
-    return updateTaskStatus(payload);
+    const response = await updateTaskStatusById(payload.taskId, payload.status);
+    return response;
   }
 );
 
-export const updateTaskByStatusAsync = createAsyncThunk(
-  "board/updateTaskByStatusAsync",
-  async (payload: {
-    boardId: string,
-    oldStatus: string,
-    newStatus: string,
-    color?: string,
-  }) => {
-    return updateTaskByStatus(payload);
+export const archiveMultipleTasksByStatusAsync = createAsyncThunk(
+  "board/archiveMultipleTasksByStatusAsync",
+  async (payload: { boardId: string, status: string }) => {
+    const response = await archiveMultipleTasksByStatus(payload.boardId, payload.status);
+    return response;
   }
 );
 
-export const deleteTaskAsync = createAsyncThunk(
-  "board/deleteTaskAsync",
-  async (payload: { taskId: string }) => {
-    return deleteTask(payload);
-  }
-);
 
-export const createNewStatusAsync = createAsyncThunk(
-  "board/createNewStatusAsync",
-  async (payload: { status: string, color: string, boardId: string }) => {
-    return putNewStatus(payload);
-  }
-);
+// export const deleteBoardAsync = createAsyncThunk(
+//   "board/deleteBoardAsync",
+//   async (boardId: string) => {
+//     const payload = {
+//       boardId: boardId,
+//     };
+//     return deleteBoard(payload);
+//   }
+// );
+
+// export const createNewStatusAsync = createAsyncThunk(
+//   "board/createNewStatusAsync",
+//   async (payload: { status: string, color: string, boardId: string }) => {
+//     return putNewStatus(payload);
+//   }
+// );

@@ -1,7 +1,13 @@
+import { WhereFilterOp } from "firebase/firestore";
 
 export interface BoardSliceState {
     boards: IBoard[];
     selectedBoard?: IBoard;
+    tasks: ITask[];
+    status: 'idle' | 'loading' | 'failed';
+}
+
+export interface TaskSliceState {
     tasks: ITask[];
     status: 'idle' | 'loading' | 'failed';
 }
@@ -22,6 +28,8 @@ export interface IBoard {
     id: string;
     title: string;
     statuses: IStatus[];
+    isArchived: boolean;
+    userId: string
 }
 
 export interface IStatus {
@@ -29,7 +37,6 @@ export interface IStatus {
     status: string;
     color: string;
     isArchived: boolean;
-    userId: string
 }
 
 export interface ITask {
@@ -42,6 +49,7 @@ export interface ITask {
     assignees?: string[];
     comments?: string[];
     subTasks: ISubTask[];
+    isArchived: boolean;
 }
 
 export interface ISubTask {
@@ -55,8 +63,14 @@ export interface NewBoardResult {
     newBoard: IBoard 
 }
 
-export interface DeleteBoardResult{
+export interface DeleteBoardResult {
     boards: IBoard[]
     deletedBoardId: string
     message: string
+}
+
+export interface WhereClause { 
+    field: string, 
+    comparison: WhereFilterOp, 
+    value:any 
 }

@@ -1,19 +1,42 @@
 import addData from "@/lib/firebase/firestore/addData";
-import { getCollection } from "@/lib/firebase/firestore/getData";
-import { IBoard, ITask } from "@/lib/interfaces";
+import { deleteFromArray, deleteWhere, deleteWhereMultiple } from "@/lib/firebase/firestore/deleteData";
+import { getCollection, getCollectionWhere } from "@/lib/firebase/firestore/getData";
+import { updateToArray, updateWhere } from "@/lib/firebase/firestore/updateData";
+import { IBoard, IStatus, ITask, WhereClause } from "@/lib/interfaces";
+import { nanoid } from "@reduxjs/toolkit";
 
 const BOARD_COLLECTION = 'boards'
+const TASK_COLLECTION = 'tasks'
 
-const generateBoardId = (title: string) => {
-  return title.trim().toLocaleLowerCase().replace(/ /g, '_')
-}
-
+// BOARDS
 export const putNewBoard = async (payload: { title: string; }) => {
   try {
     // TODO: Add boards with userId
     const { id, data } = await addData(BOARD_COLLECTION, generateBoardId(payload.title), payload);
     const board: IBoard = { ...data, id }
     return board;
+  } catch (error) {
+    console.error('Error creating a new task:', error);
+    throw error;
+  }
+};
+
+export const createNewStatus = async (payload: { title: string; color: string, boardId: string }) => {
+  try {
+    // TODO: Add boards with userId
+    const status: IStatus = {
+      color: payload.color,
+      id: nanoid(),
+      isArchived: false,
+      status: payload.title,
+    }
+    const result = await updateToArray(BOARD_COLLECTION, [{
+      field: 'boardId',
+      comparison: '==',
+      value: payload.boardId
+    }], status);
+
+    return { success: result, status };
   } catch (error) {
     console.error('Error creating a new task:', error);
     throw error;
@@ -37,197 +60,350 @@ export const fetchBoards = async (): Promise<IBoard[]> => {
   }
 };
 
-
-
-
-
-const API_URL = "http://localhost:3001";
-
-export const fetchBoardTasks = async (id: string): Promise<ITask[]> => {
+// TASKS
+export const putNewTask = async (payload: {
+  boardId: string,
+  task: ITask
+}) => {
   try {
-    const response = await fetch(`${API_URL}/api/boards/${id}/tasks`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    });
+    // TODO: Add Tasks with boardId
+    const { id, data } = await addData(TASK_COLLECTION, nanoid(), payload);
+    const task: ITask = { ...data, id }
+    return task;
+  } catch (error) {
+    console.error('Error creating a new task:', error);
+    throw error;
+  }
+};
 
-    if (!response.ok) {
-      // Handle internal server error or other non-successful responses here
-      console.error(`Error fetching board tasks. Status: ${response.status}`);
-      return [];
-    }
+export const fetchBoardTasks = async (boardId: string): Promise<ITask[]> => {
+  try {
 
-    return await response.json();
+    // TODO: Fetch boards by userId
+    let result: ITask[] = (await getCollectionWhere(TASK_COLLECTION, [{
+      field: 'boardId',
+      comparison: '==',
+      value: boardId
+    },
+      {
+        field: 'isArchived',
+        comparison: '==',
+        value: false
+      }])).result!
+    return result;
   } catch (error) {
     // Handle network or other errors here
-    console.error("Error fetching board tasks:", error);
+    console.error("Error fetching tasks:", error);
     return [];
   }
 };
 
-export const putNewTask = async (payload: {task: ITask, boardId: string}) => {
+export const deleteSingleTask = async (taskId: string): Promise<any> => {
   try {
-    // Assuming you have a function to create a new task in your backend
-    const response = await fetch(`${API_URL}/api/boards/${payload.boardId}/tasks`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        ...payload.task
-      }),
-    });
 
-    if (!response.ok) {
-      throw new Error('Error creating a new task');
-    }
-
-    const newTask = await response.json();
-    return newTask;
+    // TODO: Fetch boards by userId
+    let result: boolean = (await deleteWhere(TASK_COLLECTION, {
+      field: 'taskId',
+      comparison: '==',
+      value: taskId
+    })).success!
+    return { success: result, taskId };
   } catch (error) {
-    console.error('Error creating a new task:', error);
-    throw error;
+    // Handle network or other errors here
+    console.error("Error deleting task:", error);
+    return { success: false, error };
   }
 };
 
-export const deleteTaskByStatus = async (payload: { boardId: string; status: string }) => {
+export const deleteMultipleTasksByStatus = async (boardId: string, status: string): Promise<any> => {
   try {
-    // Assuming you have a function to delete tasks by status in your backend
-    const response = await fetch(`${API_URL}/api/boards/${payload.boardId}/tasks/status/${payload.status}`, {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-    });
 
-    if (!response.ok) {
-      throw new Error('Error deleting tasks by status');
-    }
+    const boardComparison: WhereClause = {
+      field: 'boardId',
+      comparison: '==',
+      value: boardId
+    };
 
-    const remainingTasks = await response.json();
-    return remainingTasks;
+    // delete from tasks
+    let result1: boolean = (await deleteWhereMultiple(TASK_COLLECTION, [boardComparison,
+      {
+        field: 'status',
+        comparison: '==',
+        value: status
+      }])).success!
+
+    // delete status from board.statuses array
+    let result2: boolean = (await deleteFromArray(BOARD_COLLECTION, [boardComparison], status)).success!;
+
+    return { success: result1 && result2, boardId, status };
   } catch (error) {
-    console.error('Error deleting tasks by status:', error);
-    throw error;
+    // Handle network or other errors here
+    console.error("Error deleting tasks:", error);
+    return { success: false, error };
   }
 };
 
-export const archiveTaskByStatus = async (payload: { boardId: string; status: string }) => {
+export const updateTaskStatusByStatus = async (boardId: string, oldStatus: string, newStatus: string): Promise<any> => {
   try {
-    // Assuming you have a function to delete tasks by status in your backend
-    const response = await fetch(`${API_URL}/api/boards/${payload.boardId}/tasks/archive/${payload.status}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-    });
-
-    if (!response.ok) {
-      throw new Error('Error deleting tasks by status');
-    }
-
-    const remainingTasks = await response.json();
-    return remainingTasks;
+    let result: boolean = (await updateWhere(TASK_COLLECTION, [{
+      field: 'boardId',
+      comparison: '==',
+      value: boardId
+    },
+    {
+      field: 'status',
+      comparison: '==',
+      value: oldStatus
+    }], 'status', newStatus)).success!
+    return {success: result, oldStatus, newStatus};
   } catch (error) {
-    console.error('Error deleting tasks by status:', error);
-    throw error;
+    // Handle network or other errors here
+    console.error("Error updating tasks by status:", error);
+    return {success: false, error};
   }
 };
 
-export const deleteBoard = async (payload: { boardId: string }) => {
+export const updateTaskStatusById = async (taskId: string, status: string): Promise<any> => {
   try {
-    // Assuming you have a function to delete tasks by status in your backend
-    const response = await fetch(`${API_URL}/api/boards/${payload.boardId}`, {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-    });
-
-    if (!response.ok) {
-      throw new Error('Error deleting tasks by status');
-    }
-
-    const { message, boards } = await response.json();
-    return { message, boards, deletedBoardId: payload.boardId };
+    let result: boolean = (await updateWhere(TASK_COLLECTION, [
+    {
+      field: 'taskId',
+      comparison: '==',
+      value: taskId
+    }], 'status', status)).success!
+    return { success: result, taskId, status};
   } catch (error) {
-    console.error('Error deleting tasks by status:', error);
-    throw error;
+    // Handle network or other errors here
+    console.error("Error updating tasks by status:", error);
+    return {success: false, error};
   }
 };
 
-export const updateTaskStatus = async (payload: { taskId: string; status: string }) => {
+export const archiveMultipleTasksByStatus = async (boardId: string, status: string): Promise<any> => {
   try {
-    const response = await fetch(`${API_URL}/api/tasks/${payload.taskId}/status/${payload.status}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-    });
 
-    if (!response.ok) {
-      throw new Error('Error updating task status');
-    }
-
-    const task = await response.json();
-    return task;
+    // TODO: Fetch boards by userId
+    let result: boolean = (await updateWhere(TASK_COLLECTION, [{
+      field: 'boardId',
+      comparison: '==',
+      value: boardId
+    },
+    {
+      field: 'status',
+      comparison: '==',
+      value: status
+    }], 'isArchived', true)).success!
+    return { success: result, boardId, status };
   } catch (error) {
-    console.error('Error updating task status:', error);
-    throw error;
+    // Handle network or other errors here
+    console.error("Error archiving tasks:", error);
+    return { success: false, error };
   }
 };
 
-export const updateTaskByStatus = async (
-  payload: { 
-    boardId: string, oldStatus: string, newStatus: string, color?: string
-  }) => {
-  try {
-    const response = 
-      await fetch(`${API_URL}/api/boards/${payload.boardId}/status/${payload.oldStatus}/${payload.newStatus}/${payload.color}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-    });
 
-    if (!response.ok) {
-      throw new Error('Error updating task status');
-    }
 
-    return await response.json();
-  } catch (error) {
-    console.error('Error updating task status:', error);
-    throw error;
-  }
-};
+// UTILS
+const generateBoardId = (title: string) => {
+  return title.trim().toLocaleLowerCase().replace(/ /g, '_')
+}
 
-export const deleteTask = async (payload: { taskId: string }) => {
-  try {
-    // Assuming you have a function to delete tasks by status in your backend
-    const response = await fetch(`${API_URL}/api/tasks/${payload.taskId}`, {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-    });
 
-    if (!response.ok) {
-      throw new Error('Error deleting task');
-    }
 
-    const { message } = await response.json();
-    return { message, deletedTaskId: payload.taskId };
-  } catch (error) {
-    console.error('Error deleting task:', error);
-    throw error;
-  }
-};
 
-export const putNewStatus = async (payload: { status: string; color: string; boardId: string }) => {
-  try {
-    // Assuming you have a function to create a new task in your backend
-    const response = await fetch(`${API_URL}/api/boards/${payload.boardId}/statuses`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        status: payload.status,
-        color: payload.color,
-      }),
-    });
 
-    if (!response.ok) {
-      throw new Error('Error creating a new status');
-    }
 
-    const { board } = await response.json();
-    return { board };
-  } catch (error) {
-    console.error('Error creating a new task:', error);
-    throw error;
-  }
-};
+
+
+
+
+// const API_URL = "http://localhost:3001";
+
+// export const fetchBoardTasks = async (id: string): Promise<ITask[]> => {
+//   try {
+//     const response = await fetch(`${API_URL}/api/boards/${id}/tasks`, {
+//       method: 'GET',
+//       headers: { 'Content-Type': 'application/json' },
+//     });
+
+//     if (!response.ok) {
+//       // Handle internal server error or other non-successful responses here
+//       console.error(`Error fetching board tasks. Status: ${response.status}`);
+//       return [];
+//     }
+
+//     return await response.json();
+//   } catch (error) {
+//     // Handle network or other errors here
+//     console.error("Error fetching board tasks:", error);
+//     return [];
+//   }
+// };
+
+// export const putNewTask = async (payload: {task: ITask, boardId: string}) => {
+//   try {
+//     // Assuming you have a function to create a new task in your backend
+//     const response = await fetch(`${API_URL}/api/boards/${payload.boardId}/tasks`, {
+//       method: 'POST',
+//       headers: { 'Content-Type': 'application/json' },
+//       body: JSON.stringify({
+//         ...payload.task
+//       }),
+//     });
+
+//     if (!response.ok) {
+//       throw new Error('Error creating a new task');
+//     }
+
+//     const newTask = await response.json();
+//     return newTask;
+//   } catch (error) {
+//     console.error('Error creating a new task:', error);
+//     throw error;
+//   }
+// };
+
+// export const deleteTaskByStatus = async (payload: { boardId: string; status: string }) => {
+//   try {
+//     // Assuming you have a function to delete tasks by status in your backend
+//     const response = await fetch(`${API_URL}/api/boards/${payload.boardId}/tasks/status/${payload.status}`, {
+//       method: 'DELETE',
+//       headers: { 'Content-Type': 'application/json' },
+//     });
+
+//     if (!response.ok) {
+//       throw new Error('Error deleting tasks by status');
+//     }
+
+//     const remainingTasks = await response.json();
+//     return remainingTasks;
+//   } catch (error) {
+//     console.error('Error deleting tasks by status:', error);
+//     throw error;
+//   }
+// };
+
+// export const archiveTaskByStatus = async (payload: { boardId: string; status: string }) => {
+//   try {
+//     // Assuming you have a function to delete tasks by status in your backend
+//     const response = await fetch(`${API_URL}/api/boards/${payload.boardId}/tasks/archive/${payload.status}`, {
+//       method: 'PUT',
+//       headers: { 'Content-Type': 'application/json' },
+//     });
+
+//     if (!response.ok) {
+//       throw new Error('Error deleting tasks by status');
+//     }
+
+//     const remainingTasks = await response.json();
+//     return remainingTasks;
+//   } catch (error) {
+//     console.error('Error deleting tasks by status:', error);
+//     throw error;
+//   }
+// };
+
+// export const deleteBoard = async (payload: { boardId: string }) => {
+//   try {
+//     // Assuming you have a function to delete tasks by status in your backend
+//     const response = await fetch(`${API_URL}/api/boards/${payload.boardId}`, {
+//       method: 'DELETE',
+//       headers: { 'Content-Type': 'application/json' },
+//     });
+
+//     if (!response.ok) {
+//       throw new Error('Error deleting tasks by status');
+//     }
+
+//     const { message, boards } = await response.json();
+//     return { message, boards, deletedBoardId: payload.boardId };
+//   } catch (error) {
+//     console.error('Error deleting tasks by status:', error);
+//     throw error;
+//   }
+// };
+
+// export const updateTaskStatus = async (payload: { taskId: string; status: string }) => {
+//   try {
+//     const response = await fetch(`${API_URL}/api/tasks/${payload.taskId}/status/${payload.status}`, {
+//       method: 'PUT',
+//       headers: { 'Content-Type': 'application/json' },
+//     });
+
+//     if (!response.ok) {
+//       throw new Error('Error updating task status');
+//     }
+
+//     const task = await response.json();
+//     return task;
+//   } catch (error) {
+//     console.error('Error updating task status:', error);
+//     throw error;
+//   }
+// };
+
+// export const updateTaskByStatus = async (
+//   payload: { 
+//     boardId: string, oldStatus: string, newStatus: string, color?: string
+//   }) => {
+//   try {
+//     const response = 
+//       await fetch(`${API_URL}/api/boards/${payload.boardId}/status/${payload.oldStatus}/${payload.newStatus}/${payload.color}`, {
+//       method: 'PUT',
+//       headers: { 'Content-Type': 'application/json' },
+//     });
+
+//     if (!response.ok) {
+//       throw new Error('Error updating task status');
+//     }
+
+//     return await response.json();
+//   } catch (error) {
+//     console.error('Error updating task status:', error);
+//     throw error;
+//   }
+// };
+
+// export const deleteTask = async (payload: { taskId: string }) => {
+//   try {
+//     // Assuming you have a function to delete tasks by status in your backend
+//     const response = await fetch(`${API_URL}/api/tasks/${payload.taskId}`, {
+//       method: 'DELETE',
+//       headers: { 'Content-Type': 'application/json' },
+//     });
+
+//     if (!response.ok) {
+//       throw new Error('Error deleting task');
+//     }
+
+//     const { message } = await response.json();
+//     return { message, deletedTaskId: payload.taskId };
+//   } catch (error) {
+//     console.error('Error deleting task:', error);
+//     throw error;
+//   }
+// };
+
+// export const putNewStatus = async (payload: { status: string; color: string; boardId: string }) => {
+//   try {
+//     // Assuming you have a function to create a new task in your backend
+//     const response = await fetch(`${API_URL}/api/boards/${payload.boardId}/statuses`, {
+//       method: 'POST',
+//       headers: { 'Content-Type': 'application/json' },
+//       body: JSON.stringify({
+//         status: payload.status,
+//         color: payload.color,
+//       }),
+//     });
+
+//     if (!response.ok) {
+//       throw new Error('Error creating a new status');
+//     }
+
+//     const { board } = await response.json();
+//     return { board };
+//   } catch (error) {
+//     console.error('Error creating a new task:', error);
+//     throw error;
+//   }
+// };

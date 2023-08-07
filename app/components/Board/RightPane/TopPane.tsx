@@ -14,10 +14,10 @@ export const TopPane = ({ board }: { board?: IBoard }) => {
             <h3 className={`paneTitle`}>{board ? board.title : `No Board Selected`}</h3>
             <div className="top-bar-actions">
                 <div className="flex ac">
-                    <button className="btn btn-rnd pry-bg mr-1"
-                        disabled={!board ? true : false}
+                    {board && <button className="btn btn-rnd pry-bg mr-1"
+                        disabled={!board || !board.statuses || (board.statuses.length === 0) ? true : false}
                         onClick={() => dispatch(modalSlice.actions.setState(true))}
-                    >+ Add New Task</button>
+                    >+ Add New Task</button>}
                     <button className="btn btn-icon plain"
                         onClick={() => setShowTopBarOptions(!showTopBarOptions)}>
                         <img style={{marginRight: "0px"}} src="/assets/icon-vertical-ellipsis.svg" alt="Logo" />
