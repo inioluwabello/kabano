@@ -68,13 +68,13 @@ export const NewTask = ({ board, statusArray }: NewTaskProp) => {
             if (newTaskTitle !== '') {
                 try {
                     const payload = {
-                        boardId: board?.id ?? '',
                         task: {
                             title: newTaskTitle,
                             status: newStatusName.toLocaleUpperCase(),
                             description: '',
                             subTasks: [],
-                            isArchived: false
+                            isArchived: false,
+                            boardId: board!.id
                         }
                         
                     };

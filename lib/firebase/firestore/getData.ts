@@ -42,10 +42,10 @@ export async function getCollectionWhere(collectionPath: string, qr: WhereClause
     const q =
       (qr.length === 1) ?
         query(collectionRef,
-          where(qr[1].field, qr[1].comparison, qr[1].value)) :
+          where(qr[0].field, qr[0].comparison, qr[0].value)) :
         query(collectionRef,
-          where(qr[1].field, qr[1].comparison, qr[1].value),
-          where(qr[2].field, qr[2].comparison, qr[2].value));
+          where(qr[0].field, qr[0].comparison, qr[0].value),
+          where(qr[1].field, qr[1].comparison, qr[1].value));
 
     // Fetch the documents that satisfy the query
     const querySnapshot: QuerySnapshot<DocumentData> = await getDocs(q);

@@ -39,7 +39,6 @@ export const SignUpForm = ({ setLoading }:
     const handleGoogleSignIn = async () => {
         setLoading(true);
         const { result, error } = await signInWithGoogle();
-        console.log({ result, error })
         handleAuthResult(error);
     }
 

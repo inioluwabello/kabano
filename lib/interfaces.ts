@@ -50,6 +50,7 @@ export interface ITask {
     comments?: string[];
     subTasks: ISubTask[];
     isArchived: boolean;
+    boardId: string;
 }
 
 export interface ISubTask {

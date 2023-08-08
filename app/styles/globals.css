@@ -185,21 +185,31 @@ a {
   font-size: 12px;
 }
 
-
-
-
-
-
-
-
-
-
-
-.task-board > .empty {
-  justify-content: center;
-    align-items: center;
-    height: calc(100vh - 54px);
+.btn-icon {
+  padding: 0px !important;
+  background: none;
+  width: 16px;
+  height: 16px;
 }
+.column {
+  min-width: 180px;
+  max-width: 250px;
+  width: 20%;
+  margin-right: 1em;
+  min-height: 100vh;
+}
+
+.task-column {
+  height: 13px;
+}
+
+.column>h2,
+.task-column>h2 {
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 1px;
+}
+
 .task-card {
   border-radius: 5px;
   padding: 1em;
@@ -236,6 +246,54 @@ a {
   height: 100vh;
 }
 
+.alt-pry-text {
+  color: var(--blue);
+}
+
+.d-none {
+  display: none;
+}
+
+.inline-editor {
+  outline: none;
+  background: none;
+  font-size: 12px;
+  border: 0;
+}
+
+.new-task {
+  outline: none;
+  background: none;
+  border: 0;
+  margin-top: 2em;
+  color: #ffffff;
+  font-size: 12px;
+}
+
+.new-task-inline {
+  margin-top: unset;
+}
+
+.btn-icon > img {
+  width: 4px;
+}
+
+
+
+
+
+
+
+
+
+
+
+.task-board > .empty {
+  justify-content: center;
+    align-items: center;
+    height: calc(100vh - 54px);
+}
+
 .d-none {
   display: none;
 }
@@ -250,7 +308,7 @@ a {
 
 .status-options {
   position: absolute;
-  background: var(--very-dark-bg);
+  background: var(--dark-grey);
   border-radius: 5px;
   min-width: 138px;
   right: 0;

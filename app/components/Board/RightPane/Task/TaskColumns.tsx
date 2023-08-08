@@ -86,7 +86,6 @@ export const TaskColumns = ({
         }
         if (e.key === 'Enter' && newStatusName !== '') {
             const statusIndex = statusArray.findIndex(s => s.status === newStatusName.toLocaleUpperCase())
-            console.log(statusIndex)
 
             if (statusIndex === -1){
                 const payload = { 
@@ -119,13 +118,12 @@ export const TaskColumns = ({
                 {
                     statusEditorVisible === false &&
                     showOptionButton === true  && 
+
                     <button
                         onClick={handleOptionsClick}
                         className="btn btn-icon">
                         <img src="/assets/icon-vertical-ellipsis.svg"
-                            alt="Options"
-                            width={16}
-                            height={16} />
+                            alt="Options" />
                     </button>
                 }
 

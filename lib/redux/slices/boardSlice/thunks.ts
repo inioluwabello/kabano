@@ -33,7 +33,6 @@ export const createNewStatusAsync = createAsyncThunk(
 export const createNewTaskAsync = createAsyncThunk(
   "board/createNewTaskAsync",
   async (payload: {
-    boardId: string,
     task: ITask
   }) => {
     return putNewTask(payload);

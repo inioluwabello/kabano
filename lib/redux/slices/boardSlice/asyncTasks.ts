@@ -1,7 +1,7 @@
 import addData from "@/lib/firebase/firestore/addData";
 import { deleteFromArray, deleteWhere, deleteWhereMultiple } from "@/lib/firebase/firestore/deleteData";
 import { getCollection, getCollectionWhere } from "@/lib/firebase/firestore/getData";
-import { updateToArray, updateWhere } from "@/lib/firebase/firestore/updateData";
+import { updateToArrayInDocument, updateWhere } from "@/lib/firebase/firestore/updateData";
 import { IBoard, IStatus, ITask, WhereClause } from "@/lib/interfaces";
 import { nanoid } from "@reduxjs/toolkit";
 
@@ -30,16 +30,16 @@ export const createNewStatus = async (payload: { title: string; color: string, b
       isArchived: false,
       status: payload.title,
     }
-    const result = await updateToArray(BOARD_COLLECTION, [{
-      field: 'boardId',
-      comparison: '==',
-      value: payload.boardId
-    }], status);
+    const result = (await updateToArrayInDocument(
+        BOARD_COLLECTION,
+        payload.boardId, 
+        'statuses', 
+        status));
 
-    return { success: result, status };
+    return { success: result.success, status, error: result.error };
   } catch (error) {
     console.error('Error creating a new task:', error);
-    throw error;
+    return { success:false, error };
   }
 };
 
@@ -62,7 +62,6 @@ export const fetchBoards = async (): Promise<IBoard[]> => {
 
 // TASKS
 export const putNewTask = async (payload: {
-  boardId: string,
   task: ITask
 }) => {
   try {
@@ -103,7 +102,7 @@ export const deleteSingleTask = async (taskId: string): Promise<any> => {
 
     // TODO: Fetch boards by userId
     let result: boolean = (await deleteWhere(TASK_COLLECTION, {
-      field: 'taskId',
+      field: 'id',
       comparison: '==',
       value: taskId
     })).success!
@@ -167,7 +166,7 @@ export const updateTaskStatusById = async (taskId: string, status: string): Prom
   try {
     let result: boolean = (await updateWhere(TASK_COLLECTION, [
     {
-      field: 'taskId',
+      field: 'id',
       comparison: '==',
       value: taskId
     }], 'status', status)).success!
@@ -182,7 +181,6 @@ export const updateTaskStatusById = async (taskId: string, status: string): Prom
 export const archiveMultipleTasksByStatus = async (boardId: string, status: string): Promise<any> => {
   try {
 
-    // TODO: Fetch boards by userId
     let result: boolean = (await updateWhere(TASK_COLLECTION, [{
       field: 'boardId',
       comparison: '==',

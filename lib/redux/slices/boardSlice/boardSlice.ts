@@ -41,11 +41,17 @@ export const boardSlice = createSlice({
       })
       .addCase(createNewStatusAsync.fulfilled, (state, action: PayloadAction<any>) => {
         state.status = 'idle';
+        console.log(action.payload)
         if (action.payload.success === true) {
+          // update selectedBoard
           if (!state.selectedBoard?.statuses) {
             state.selectedBoard!.statuses = [];
           }
           state.selectedBoard?.statuses.push(action.payload.status)
+
+          // update boards
+          const boardIndex = state.boards.findIndex(b => b.id === state.selectedBoard?.id);
+          state.boards[boardIndex] = state.selectedBoard!;
         }
       })
       .addCase(getBoardsAsync.pending, (state) => {
@@ -185,15 +191,6 @@ export const boardSlice = createSlice({
       //   state.status = 'idle';
       //   const { deletedTaskId, message } = action.payload;
       //   state.tasks = state.tasks.filter((f) => f.id !== deletedTaskId)
-      // })
-
-      // .addCase(createNewStatusAsync.pending, (state) => {
-      //   state.status = 'loading';
-      // })
-      // .addCase(createNewStatusAsync.fulfilled, (state, action) => {
-      //   state.status = 'idle';
-      //   const { board } = action.payload;
-      //   state.selectedBoard = board;
       // })
   },
 });

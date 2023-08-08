@@ -76,3 +76,7 @@ button:disabled {
 .empty-board > .btn {
     padding: 1em 2em;
 }
+
+.task-column > h2 {
+    font-size: 12px;
+}
