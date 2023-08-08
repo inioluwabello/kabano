@@ -113,8 +113,7 @@ export const NewTask = ({ board, statusArray }: NewTaskProp) => {
                     onClick={handleNewColumnCLick}
                     className={`
                         ${newClEditorVisible === false ? '' : 'd-none'}
-                        ${newStatusName === '' ? `alt-pry-text` : 'alt-text'} pointer
-                        `}
+                        ${newStatusName === '' ? `alt-pry-text` : 'alt-text'} pointer new-column`}
                 >{newStatusName === '' ? `+ New Column` : newStatusName.toLocaleUpperCase()}</h2>
 
                 <input type="text"

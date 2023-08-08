@@ -22,8 +22,6 @@ export const TaskColumns = ({
         };
 
         document.addEventListener("click", handleClick);
-
-        // Clean up the event listener when the component unmounts
         return () => {
             document.removeEventListener("click", handleClick);
         };

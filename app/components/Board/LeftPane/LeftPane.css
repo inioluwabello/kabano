@@ -118,7 +118,8 @@
     padding: 3px;
 }
 
-.new-board-btn {
+.new-board-btn,
+.new-column {
     color: var(--main-purple)
 }
 

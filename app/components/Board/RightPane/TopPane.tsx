@@ -1,13 +1,27 @@
-import { logout } from "@/lib/firebase/auth/logout";
 import { IBoard } from "@/lib/interfaces"
 import { logoutAsync, modalSlice, useDispatch } from "@/lib/redux";
-import { useState } from "react";
+import { Dispatch, RefObject, SetStateAction, useEffect, useState } from "react";
 
-export const TopPane = ({ board }: { board?: IBoard }) => {
+export const TopPane = ({ board, topMenuActionsRef }: 
+    { board?: IBoard, topMenuActionsRef: RefObject<HTMLDivElement> }) => {
 
     const [showTopBarOptions, setShowTopBarOptions] = useState(false)
 
+    useEffect(() => {
+        const handleClick = (event: MouseEvent) => {
+            if (topMenuActionsRef.current) {
+                setShowTopBarOptions(false);
+            }
+        };
+
+        document.addEventListener("click", handleClick);
+        return () => {
+            document.removeEventListener("click", handleClick);
+        };
+    }, [showTopBarOptions]);
+
     const dispatch = useDispatch();
+
 
     return (
         <div className={`pane topPane space-between border-bottom`}>
@@ -18,7 +32,7 @@ export const TopPane = ({ board }: { board?: IBoard }) => {
                         disabled={!board || !board.statuses || (board.statuses.length === 0) ? true : false}
                         onClick={() => dispatch(modalSlice.actions.setState(true))}
                     >+ Add New Task</button>}
-                    <button className="btn btn-icon plain"
+                    <button className="btn btn-icon plain btn-icon-plain"
                         onClick={() => setShowTopBarOptions(!showTopBarOptions)}>
                         <img style={{marginRight: "0px"}} src="/assets/icon-vertical-ellipsis.svg" alt="Logo" />
                     </button>

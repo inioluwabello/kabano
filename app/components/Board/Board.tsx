@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Loading } from "../LoadingBar/Loading"
 import { LeftPane } from "./LeftPane/LeftPane"
 import { RightPane } from "./RightPane/RightPane";
@@ -36,14 +36,17 @@ export const Board = () => {
         }
     }, [dispatch]);
 
+
+    const topMenuActionsRef = useRef<HTMLDivElement>(null);
+
     return (
         <main className={`board ${theme}`}>
             
             <Loading pageLoading={false} />
 
-            <div className="flex">
+            <div className="flex" ref={topMenuActionsRef}>
                 <LeftPane boards={boards} />
-                <RightPane selectedBoard={selectedBoard} />
+                <RightPane selectedBoard={selectedBoard} topMenuActionsRef={topMenuActionsRef} />
             </div>
 
         </main>

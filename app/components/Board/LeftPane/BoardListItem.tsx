@@ -5,7 +5,6 @@ export const BoardListItem = ({ board, selected }: { board: IBoard, selected: bo
 
     const dispatch = useDispatch();
     const selectBoardHandler = () => {
-        console.log('here')
         dispatch(boardSlice.actions.selectBoard(board))
     }
 
