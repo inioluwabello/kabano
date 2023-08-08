@@ -1,6 +1,6 @@
 'use client'
 
-import React from "react";
+import React, { useEffect } from "react";
 import LoadingBar from "@/app/components/LoadingBar/LoadingBar";
 import { selectBoardStatus, selectPageStatus, useSelector } from "@/lib/redux";
 
@@ -9,6 +9,10 @@ export const Loading = ({ pageLoading }: { pageLoading: boolean }) => {
     const [loadingPercentage, setLoadingPercentage] = React.useState(0);
     const boardState = useSelector(selectBoardStatus)
     const pageStatus = useSelector(selectPageStatus)
+
+    useEffect(() => {
+        setLoadingPercentage(0);
+    }, [])
 
     // Simulate loading progress with a timer
     React.useEffect(() => {

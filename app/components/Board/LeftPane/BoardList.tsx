@@ -1,10 +1,10 @@
 import { IBoard } from "@/lib/interfaces"
 import { BoardListItem } from "./BoardListItem"
-import { createNewBoardAsync, getSelectedBoard, selectBoards, useDispatch, useSelector } from "@/lib/redux";
+import { createNewBoardAsync, getSelectedBoard, useDispatch, useSelector } from "@/lib/redux";
 import { useEffect, useRef, useState } from "react";
 
 export const BoardList = ({ boards }: { boards: IBoard[] }) => {
-    const boardList = useSelector(selectBoards);
+    // const boardList = useSelector(selectBoards);
     const selectedBoard = useSelector(getSelectedBoard)
     const dispatch = useDispatch();
 

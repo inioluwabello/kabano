@@ -65,7 +65,6 @@ export const putNewTask = async (payload: {
   task: ITask
 }) => {
   try {
-    // TODO: Add Tasks with boardId
     const { id, data } = await addData(TASK_COLLECTION, nanoid(), payload);
     const task: ITask = { ...data, id }
     return task;
