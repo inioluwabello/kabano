@@ -1,5 +1,5 @@
 import { generateColor } from '@/app/utils/util';
-import { IBoard } from '@/lib/interfaces';
+import { IBoard, ITask } from '@/lib/interfaces';
 import { createNewTaskAsync, useDispatch } from '@/lib/redux';
 import { useState, useEffect } from 'react'
 export const NewInlineTask = ({ 
@@ -26,16 +26,16 @@ export const NewInlineTask = ({
             // Dispatch the new task addition
             if (newTaskTitle !== '') {
                 try {
+                    const task: ITask = {
+                        title: newTaskTitle,
+                        status: status,
+                        description: '',
+                        subTasks: [],
+                        isArchived: false,
+                        boardId: selectedBoard!.id
+                    };
                     const payload = {
-                        boardId: selectedBoard?.id ?? '',
-                        task: {
-                            title: newTaskTitle,
-                            status: status,
-                            description: '',
-                            subTasks: [],
-                            color: generateColor(),
-                            isArchived: false
-                        }
+                        task: task
                     };
 
                     await dispatch(createNewTaskAsync(payload));
