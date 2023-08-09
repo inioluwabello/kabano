@@ -14,8 +14,8 @@ export const createNewBoardAsync = createAsyncThunk(
 
 export const getBoardsAsync = createAsyncThunk(
   "board/fetchBoardsAsync",
-  async () => {
-    const response = await fetchBoards();
+  async (userId: string) => {
+    const response = await fetchBoards(userId);
     return response;
   }
 );

@@ -53,7 +53,7 @@ export const BoardList = ({ boards }: { boards: IBoard[] }) => {
             <div className="list-title">ALL BOARDS ({boards.length})</div>
 
             {
-                boards.map(board => <BoardListItem key={board.title} board={board} selected={selectedBoard?.id === board.id} />)
+                boards.map(board => <BoardListItem key={board.id} board={board} selected={selectedBoard?.id === board.id} />)
             }
 
             <div className="new-board pointer"

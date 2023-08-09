@@ -1,6 +1,6 @@
 import { IBoard } from "@/lib/interfaces"
 import { logoutAsync, modalSlice, useDispatch } from "@/lib/redux";
-import { Dispatch, RefObject, SetStateAction, useEffect, useState } from "react";
+import { RefObject, useEffect, useState } from "react";
 
 export const TopPane = ({ board, topMenuActionsRef }: 
     { board?: IBoard, topMenuActionsRef: RefObject<HTMLDivElement> }) => {

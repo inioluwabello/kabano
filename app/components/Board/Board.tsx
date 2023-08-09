@@ -15,18 +15,17 @@ export const Board = () => {
     const theme = useSelector(selectTheme)
 
 
-    const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch(getBoardsAsync())
-    }, [])
-
     const { user } = useAuthContext()
+
+    const dispatch = useDispatch();
     const router = useRouter()
-
     useEffect(() => {
-        if (user == null) router.push("/")
+        if (user == null) {
+            router.push("/")
+        } else {
+            dispatch(getBoardsAsync(user.userId!))
+        }
     }, [user, router])
-
 
     useEffect(() => {
         // On page load, check if there's a saved theme in localStorage

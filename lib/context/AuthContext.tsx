@@ -8,15 +8,17 @@ import { Loading } from "@/app/components/LoadingBar/Loading";
 const auth = getAuth(firebase_app);
 
 // Define the type for the user object
-interface User {
+interface IUser {
   // Your user object properties here
   displayName: string | null;
   email: string | null;
+  userId: string | null;
+  userPhoto: string | null;
   // Add other properties if needed
 }
 
 interface AuthContextType {
-  user: User | null;
+  user: IUser | null;
 }
 
 export const AuthContext = React.createContext<AuthContextType>({ user: null });
@@ -28,16 +30,18 @@ interface AuthContextProviderProps {
 }
 
 export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({ children }) => {
-  const [user, setUser] = React.useState<User | null>(null);
+  const [user, setUser] = React.useState<IUser | null>(null);
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user: FirebaseAuthUser | null) => {
       if (user) {
         // Map the FirebaseAuthUser to your User object
-        const mappedUser: User = {
+        const mappedUser: IUser = {
           displayName: user.displayName,
           email: user.email,
+          userId: user.uid,
+          userPhoto: user.photoURL
           // Add other properties if needed
         };
         setUser(mappedUser);

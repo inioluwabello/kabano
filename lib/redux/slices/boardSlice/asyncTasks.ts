@@ -43,11 +43,15 @@ export const createNewStatus = async (payload: { title: string; color: string, b
   }
 };
 
-export const fetchBoards = async (): Promise<IBoard[]> => {
+export const fetchBoards = async(userId: string): Promise<IBoard[]> => {
   try {
     
-    // TODO: Fetch boards by userId
-    let data: any[] = (await getCollection(BOARD_COLLECTION)).result!
+    const whereClause: WhereClause = {
+      field: 'userId',
+      comparison: '==',
+      value:userId
+    }
+    let data: any[] = (await getCollectionWhere(BOARD_COLLECTION, [whereClause])).result!
     const result = data.map((e) => {
       return { ...e.data, id: e.id }
     })
@@ -78,7 +82,7 @@ export const fetchBoardTasks = async (boardId: string): Promise<ITask[]> => {
   try {
 
     // TODO: Fetch boards by userId
-    let result: ITask[] = (await getCollectionWhere(TASK_COLLECTION, [{
+    let result: ITask[] = ((await getCollectionWhere(TASK_COLLECTION, [{
       field: 'boardId',
       comparison: '==',
       value: boardId
@@ -87,7 +91,9 @@ export const fetchBoardTasks = async (boardId: string): Promise<ITask[]> => {
         field: 'isArchived',
         comparison: '==',
         value: false
-      }])).result!
+      }])).result!).map(r => ({
+        id: r.id, ...r.data
+      }))
     return result;
   } catch (error) {
     // Handle network or other errors here

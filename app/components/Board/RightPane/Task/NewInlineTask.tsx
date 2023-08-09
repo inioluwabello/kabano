@@ -1,4 +1,3 @@
-import { generateColor } from '@/app/utils/util';
 import { IBoard, ITask } from '@/lib/interfaces';
 import { createNewTaskAsync, useDispatch } from '@/lib/redux';
 import { useState, useEffect } from 'react'

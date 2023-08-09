@@ -50,10 +50,12 @@ export async function getCollectionWhere(collectionPath: string, qr: WhereClause
     // Fetch the documents that satisfy the query
     const querySnapshot: QuerySnapshot<DocumentData> = await getDocs(q);
 
-    const result: any = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...(doc.data())
-    }));
+    const result: { id: string; data: any }[] = querySnapshot.docs.map((doc) => {
+      return {
+        id: doc.id,
+        data: doc.data()
+      };
+    });
 
     return { result };
   } catch (error) {
