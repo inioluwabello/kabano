@@ -11,10 +11,11 @@ export const TaskBoard = memo(({ board }: { board?: IBoard }) => {
 
     const dispatch = useDispatch();
     useEffect(() => {
+        console.log(board)
         if (board) {
             dispatch(getBoardTasksAsync(board.id))
         }
-    }, [])
+    }, [board])
 
     return (
         <div className="task-board">

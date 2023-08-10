@@ -21,6 +21,11 @@ export const NewInlineTask = ({
     const dispatch = useDispatch();
 
     const handleNewTaskEnterPress = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Escape') {
+            setNewTask('');
+            setEditing(false);
+            return;
+        }
         if (e.key === 'Enter') {
             // Dispatch the new task addition
             if (newTaskTitle !== '') {
