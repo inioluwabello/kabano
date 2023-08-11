@@ -23,11 +23,14 @@ export const TaskCard = ({ task }: TakListProps) => {
             onMouseLeave={() => setTaskIconVisible(false)}
             className="task-card pointer">
             <div className="space-between">
-                <h3>{task.title}</h3>
+                <h3>{task.title.length < 21 ? task.title : `${task.title.slice(0, 17) }...`}</h3>
                 {
-                    taskIconVisible && (
+                    taskIconVisible && 
+                    (
                         <img src="/assets/icon-cross.svg" alt="Cross"
-                            style={{width: '11px', height: '11px'}}
+                            style={{
+                                width: '11px', height: '11px', position: "relative",  top: "4px"
+                            }}
                             onClick={() => dispatch(deleteSingleTaskAsync(task.id!))} />
                     )
                 }

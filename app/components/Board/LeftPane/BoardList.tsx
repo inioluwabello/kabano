@@ -4,17 +4,8 @@ import { createNewBoardAsync, getSelectedBoard, useDispatch, useSelector } from 
 import { useEffect, useRef, useState } from "react";
 
 export const BoardList = ({ boards }: { boards: IBoard[] }) => {
-    // const boardList = useSelector(selectBoards);
     const selectedBoard = useSelector(getSelectedBoard)
     const dispatch = useDispatch();
-
-
-    // useEffect(() => {
-    //     if (!selectedBoard)
-    //         return;
-
-    //     dispatch(getBoardTasksAsync(selectedBoard!._id))
-    // }, [selectedBoard])
 
     const newBoardRef = useRef<HTMLInputElement>(null)
     const [newBoardEditorVisible, setNewEditorVisibility] = useState(false);

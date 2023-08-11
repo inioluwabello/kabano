@@ -57,8 +57,8 @@ export async function getCollectionWhere(collectionPath: string, qr: WhereClause
       };
     });
 
-    return { result };
+    return { success: true, data: result };
   } catch (error) {
-    return { error };
+    return { success: false, error };
   }
 }

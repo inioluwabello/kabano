@@ -2,7 +2,7 @@ import addData from "@/lib/firebase/firestore/addData";
 import { deleteFromArray, deleteWhere, deleteWhereMultiple } from "@/lib/firebase/firestore/deleteData";
 import { getCollection, getCollectionWhere } from "@/lib/firebase/firestore/getData";
 import { updateToArrayInDocument, updateWhere } from "@/lib/firebase/firestore/updateData";
-import { IBoard, IStatus, ITask, WhereClause } from "@/lib/interfaces";
+import { IBoard, IStatus, ITask, ITaskResult, WhereClause } from "@/lib/interfaces";
 import { nanoid } from "@reduxjs/toolkit";
 
 const BOARD_COLLECTION = 'boards'
@@ -43,7 +43,7 @@ export const createNewStatus = async (payload: { title: string; color: string, b
   }
 };
 
-export const fetchBoards = async(userId: string): Promise<IBoard[]> => {
+export const fetchBoards = async (userId: string): Promise<ITaskResult> => {
   try {
     
     const whereClause: WhereClause = {
@@ -51,18 +51,20 @@ export const fetchBoards = async(userId: string): Promise<IBoard[]> => {
       comparison: '==',
       value:userId
     }
-    let data: any[] = (await getCollectionWhere(BOARD_COLLECTION, [whereClause])).result!
-    const result = data.map((e) => {
-      return { ...e.data, id: e.id }
-    })
+    const { success, data, error } = (await getCollectionWhere(BOARD_COLLECTION, [whereClause]))
+    if (data) {
+      let result: IBoard[] = data!.map(r => ({
+        id: r.id, ...r.data
+      }))
 
-    return result;
+      return { data: result, success, error };
+    } else {
+      return { success, error };
+    }
   } catch (error) {
-    // Handle network or other errors here
-    console.error("Error fetching boards:", error);
-    return [];
+    return { success: false, error };
   }
-};
+}
 
 // TASKS
 export const putNewTask = async (payload: {
@@ -78,27 +80,31 @@ export const putNewTask = async (payload: {
   }
 };
 
-export const fetchBoardTasks = async (boardId: string): Promise<ITask[]> => {
+export const fetchBoardTasks = async (boardId: string): Promise<ITaskResult> => {
   try {
 
-    // TODO: Fetch boards by userId
-    let result: ITask[] = ((await getCollectionWhere(TASK_COLLECTION, [{
+    const whereClause: WhereClause[] = [{
       field: 'boardId',
       comparison: '==',
       value: boardId
     },
-      {
-        field: 'isArchived',
-        comparison: '==',
-        value: false
-      }])).result!).map(r => ({
+    {
+      field: 'isArchived',
+      comparison: '==',
+      value: false
+    }]
+    const { success, data, error } = (await getCollectionWhere(TASK_COLLECTION, whereClause));
+    if (data) {
+      let result: ITask[] = data!.map(r => ({
         id: r.id, ...r.data
       }))
-    return result;
+      
+      return { data: result, success, error};
+    } else {
+      return { success, error };
+    }
   } catch (error) {
-    // Handle network or other errors here
-    console.error("Error fetching tasks:", error);
-    return [];
+    return { success: false, error };
   }
 };
 
@@ -221,19 +227,6 @@ const generateBoardId = (title: string) => {
 
 
 // const API_URL = "http://localhost:3001";
-
-// export const fetchBoardTasks = async (id: string): Promise<ITask[]> => {
-//   try {
-//     const response = await fetch(`${API_URL}/api/boards/${id}/tasks`, {
-//       method: 'GET',
-//       headers: { 'Content-Type': 'application/json' },
-//     });
-
-//     if (!response.ok) {
-//       // Handle internal server error or other non-successful responses here
-//       console.error(`Error fetching board tasks. Status: ${response.status}`);
-//       return [];
-//     }
 
 //     return await response.json();
 //   } catch (error) {

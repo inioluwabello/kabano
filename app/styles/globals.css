@@ -218,7 +218,7 @@ a {
 }
 
 .dark .task-card {
-  background: var(--dark-bg);
+  background: var(--dark-grey);
 }
 
 .light .task-card {

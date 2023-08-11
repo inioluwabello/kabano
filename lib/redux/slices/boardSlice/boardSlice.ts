@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { BoardSliceState, IBoard, ITask } from '@/lib/interfaces';
+import { BoardSliceState, IBoard, ITask, ITaskResult } from '@/lib/interfaces';
 import { archiveMultipleTasksByStatusAsync, createNewBoardAsync, createNewStatusAsync, createNewTaskAsync, deleteMultipleTasksByStatusAsync, deleteSingleTaskAsync, getBoardsAsync, getBoardTasksAsync, updateTaskStatusByIdAsync, updateTaskStatusByStatusAsync } from './thunks';
 
 const initialState: BoardSliceState = {
@@ -57,10 +57,20 @@ export const boardSlice = createSlice({
       .addCase(getBoardsAsync.pending, (state) => {
         state.status = 'loading';
       })
-      .addCase(getBoardsAsync.fulfilled, (state, action: PayloadAction<IBoard[]>) => {
+      .addCase(getBoardsAsync.fulfilled, (state, action: PayloadAction<ITaskResult>) => {
+
+        const { success, error, data } = action.payload;
+        if (success === true) {
+          state.boards = data as IBoard[];
+          state.selectedBoard = state.boards.length > 0 ? state.boards[0] : undefined;
+          return;
+        }
+
+        if (error) {
+          console.log(error)
+        }
+
         state.status = 'idle';
-        state.boards = action.payload;
-        state.selectedBoard = state.boards[0];
       })
 
 
@@ -68,9 +78,18 @@ export const boardSlice = createSlice({
       .addCase(getBoardTasksAsync.pending, (state) => {
         state.status = 'loading';
       })
-      .addCase(getBoardTasksAsync.fulfilled, (state, action: PayloadAction<ITask[]>) => {
+      .addCase(getBoardTasksAsync.fulfilled, (state, action: PayloadAction<ITaskResult>) => {
+        const { success, error, data } = action.payload;
+        if (success === true) {
+          state.tasks = data as ITask[];
+          return;
+        } 
+        
+        if (error){
+          console.log(error)
+        }
+
         state.status = 'idle';
-        state.tasks = action.payload;
       })
 
       .addCase(createNewTaskAsync.pending, (state) => {

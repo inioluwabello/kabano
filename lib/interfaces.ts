@@ -75,3 +75,5 @@ export interface WhereClause {
     comparison: WhereFilterOp, 
     value:any 
 }
+
+export interface ITaskResult { success: boolean, data?: any, error?: any }
