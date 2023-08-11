@@ -24,12 +24,13 @@ export const TaskCard = ({ task }: TakListProps) => {
             className="task-card pointer">
             <div className="space-between">
                 <h3>{task.title}</h3>
-                {taskIconVisible  && <img src="/images/icon-cross.svg" 
-                    width={10}
-                    height={10}
-                    className="pointer"
-                    onClick={() => dispatch(deleteSingleTaskAsync(task.id!))}
-                    alt="close" />}
+                {
+                    taskIconVisible && (
+                        <img src="/assets/icon-cross.svg" alt="Cross"
+                            style={{width: '11px', height: '11px'}}
+                            onClick={() => dispatch(deleteSingleTaskAsync(task.id!))} />
+                    )
+                }
             </div>
             <p className="alt-text">{task.description}</p>
         </div>
