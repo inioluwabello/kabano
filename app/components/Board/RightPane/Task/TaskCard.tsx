@@ -35,7 +35,7 @@ export const TaskCard = ({ task }: TakListProps) => {
                     )
                 }
             </div>
-            <p className="alt-text">{task.description}</p>
+            <p className="alt-text task-description">{task.description}</p>
         </div>
     );
 };

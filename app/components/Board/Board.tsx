@@ -4,15 +4,17 @@ import { useEffect, useRef } from "react";
 import { Loading } from "../LoadingBar/Loading"
 import { LeftPane } from "./LeftPane/LeftPane"
 import { RightPane } from "./RightPane/RightPane";
-import { getBoardsAsync, getSelectedBoard, pageSlice, selectBoards, selectTheme, useDispatch, useSelector } from "@/lib/redux";
+import { getBoardsAsync, getSelectedBoard, pageSlice, selectBoards, selectModalState, selectTheme, useDispatch, useSelector } from "@/lib/redux";
 import { useAuthContext } from "@/lib/context/AuthContext";
 import { useRouter } from "next/navigation";
+import { NewTaskModal } from "./RightPane/Task/Modal/NewTaskModal";
 
 export const Board = () => {
 
     const boards = useSelector(selectBoards);
     const selectedBoard = useSelector(getSelectedBoard)
     const theme = useSelector(selectTheme)
+    const modalIsOpen = useSelector(selectModalState)
 
 
     const { user } = useAuthContext()
@@ -48,6 +50,11 @@ export const Board = () => {
                 <RightPane selectedBoard={selectedBoard} topMenuActionsRef={topMenuActionsRef} />
             </div>
 
+            {
+                modalIsOpen &&
+                selectedBoard &&
+                <NewTaskModal statusOptions={selectedBoard!.statuses} boardId={selectedBoard!.id} />
+            }
         </main>
     )
 }

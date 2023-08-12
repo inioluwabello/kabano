@@ -79,6 +79,8 @@ export const boardSlice = createSlice({
         state.status = 'loading';
       })
       .addCase(getBoardTasksAsync.fulfilled, (state, action: PayloadAction<ITaskResult>) => {
+
+        state.status = 'idle';
         const { success, error, data } = action.payload;
         if (success === true) {
           state.tasks = data as ITask[];
@@ -88,8 +90,6 @@ export const boardSlice = createSlice({
         if (error){
           console.log(error)
         }
-
-        state.status = 'idle';
       })
 
       .addCase(createNewTaskAsync.pending, (state) => {

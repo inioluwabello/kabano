@@ -13,6 +13,32 @@
   --red: #E85555;
   --red-hover: #FF9898;
 }
+/* Define the scrollbar width and color */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Define the track color */
+::-webkit-scrollbar-track {
+  background-color: #2B2C37;
+  border-radius: 4px;
+}
+
+/* Define the scrollbar thumb color and border radius */
+::-webkit-scrollbar-thumb {
+  background-color: #6D6E7A;
+  border-radius: 4px;
+}
+
+/* Hover effect on the scrollbar thumb */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #8C8D98;
+}
+
+/* Define the scrollbar thumb when it's being dragged */
+::-webkit-scrollbar-thumb:active {
+  background-color: #4F5060;
+}
 html,
 body {
   min-height: 100vh;
@@ -231,8 +257,9 @@ a {
   font-size: 14px;
 }
 
-.task-card>p {
-  font-size: 10px;
+.task-description {
+  margin-top: 5px;
+  font-size: 12px;
 }
 
 .right-pane {
@@ -381,10 +408,12 @@ a {
 .modal {
   max-width: 400px;
   width: 100%;
-  background: var(--dark-bg);
+  background: var(--dark-grey);
   padding: 1em;
   border-radius: 5px;
   box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 3px, rgba(0, 0, 0, 0.5) 0px 1px 2px;
+  max-height: calc(100vh - 3em);
+  overflow: auto;
 }
 
 .close-btn:hover {
