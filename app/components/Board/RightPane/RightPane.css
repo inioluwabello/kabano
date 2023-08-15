@@ -86,3 +86,8 @@ button:disabled {
     margin-top: 7px;
     margin-left: 1em;
 }
+
+.disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}

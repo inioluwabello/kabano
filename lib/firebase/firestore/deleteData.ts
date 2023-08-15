@@ -1,11 +1,28 @@
-import { WhereClause } from "@/lib/interfaces";
+import { IAsyncResult, WhereClause } from "@/lib/interfaces";
 import firebase_app from "../config";
 import {
-    getFirestore, QuerySnapshot, getDocs, 
-    collection, DocumentData, query, where, deleteDoc, updateDoc
+    getFirestore, QuerySnapshot, getDocs,
+    collection, DocumentData, query, where, deleteDoc, updateDoc, doc
 } from "firebase/firestore";
 
 const db = getFirestore(firebase_app);
+
+export async function deleteDocumentById(collectionPath: string, documentId: string): Promise<IAsyncResult> {
+    try {
+        // Get a reference to the collection
+        const collectionRef = collection(db, collectionPath);
+
+        // Get a reference to the document
+        const documentRef = doc(collectionRef, documentId);
+
+        // Delete the document
+        await deleteDoc(documentRef);
+
+        return { success: true, data: documentId };
+    } catch (error) {
+        return { success: false, error };
+    }
+}
 
 export async function deleteWhere(collectionPath: string, w: WhereClause) {
     try {
@@ -74,35 +91,35 @@ export async function deleteWhereMultiple(collectionPath: string, qr: WhereClaus
  * @param qr array of where clauses containing { field, comparison_operator, value}
  * @param deletedStatus the status by which status should to be removed
  */
-export async function deleteFromArray(collectionPath: string, qr: WhereClause[], deletedStatus: string) {
-  try {
-    // Get a reference to the board collection
-    const collectionRef = collection(db, collectionPath);
-    
-    // Create a query to get the board document with the specified boardId
-    const q =
-        (qr.length === 1) ?
-            query(collectionRef,
-                where(qr[0].field, qr[0].comparison, qr[0].value)) :
-            query(collectionRef,
-                where(qr[0].field, qr[0].comparison, qr[0].value),
-                where(qr[1].field, qr[1].comparison, qr[1].value));
-    const querySnapshot: QuerySnapshot<DocumentData> = await getDocs(q);
-    
-    // Get the board document
-    const boardDoc = querySnapshot.docs[0];
-    
-    // Get the current status array
-    let currentStatusArray = boardDoc.get('status') as any[];
-    
-    // Filter out the status object with the specified statusName
-    currentStatusArray = currentStatusArray.filter((status) => status.status !== deletedStatus);
-    
-    // Update the status field in the board document
-    await updateDoc(boardDoc.ref, { status: currentStatusArray });
-    
-    return { success: true };
-  } catch (error) {
-    return { error };
-  }
+export async function deleteFromArray(collectionPath: string, qr: WhereClause[], arrayName: string) {
+    try {
+        // Get a reference to the board collection
+        const collectionRef = collection(db, collectionPath);
+
+        // Create a query to get the board document with the specified boardId
+        const q =
+            (qr.length === 1) ?
+                query(collectionRef,
+                    where(qr[0].field, qr[0].comparison, qr[0].value)) :
+                query(collectionRef,
+                    where(qr[0].field, qr[0].comparison, qr[0].value),
+                    where(qr[1].field, qr[1].comparison, qr[1].value));
+        const querySnapshot: QuerySnapshot<DocumentData> = await getDocs(q);
+
+        // Get the board document
+        const boardDoc = querySnapshot.docs[0];
+
+        // Get the current status array
+        let currentStatusArray = boardDoc.get('status') as any[];
+
+        // Filter out the status object with the specified statusName
+        currentStatusArray = currentStatusArray.filter((status) => status.status !== arrayName);
+
+        // Update the status field in the board document
+        await updateDoc(boardDoc.ref, { status: currentStatusArray });
+
+        return { success: true };
+    } catch (error) {
+        return { error };
+    }
 }

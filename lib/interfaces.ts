@@ -76,4 +76,4 @@ export interface WhereClause {
     value:any 
 }
 
-export interface ITaskResult { success: boolean, data?: any, error?: any }
+export interface IAsyncResult { success: boolean, data?: any, error?: any }

@@ -1,5 +1,5 @@
 import { IBoard } from "@/lib/interfaces"
-import { logoutAsync, modalSlice, useDispatch } from "@/lib/redux";
+import { boardSlice, deleteBoardAsync, logoutAsync, modalSlice, useDispatch } from "@/lib/redux";
 import { RefObject, useEffect, useState } from "react";
 
 export const TopPane = ({ board, topMenuActionsRef }: 
@@ -22,6 +22,12 @@ export const TopPane = ({ board, topMenuActionsRef }:
 
     const dispatch = useDispatch();
 
+    const handleDeleteClick = () => {
+        if (board) {
+            dispatch(deleteBoardAsync(board.id))
+        }
+    }
+
 
     return (
         <div className={`pane topPane space-between border-bottom`}>
@@ -42,8 +48,9 @@ export const TopPane = ({ board, topMenuActionsRef }:
                     <div className={`topBarActions`}>
                         <ul>
                             <li className="pointer hoverable">Archived Items</li>
-                            <li className="pointer hoverable border-top">Edit Board</li>
-                            <li className="pointer hoverable red-color">Delete Board</li>
+                            {/* <li className="pointer hoverable border-top">Edit Board</li> */}
+                            <li className={`pointer hoverable red-color ${board ? '' : 'disabled'}`}
+                                onClick={() => handleDeleteClick()}>Delete Board</li>
                             <li 
                                 onClick={() =>  dispatch(logoutAsync()) }
                                 className="pointer hoverable border-top red-color">Sign out</li>

@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { archiveMultipleTasksByStatus, createNewStatus, deleteMultipleTasksByStatus, deleteSingleTask, fetchBoardTasks, fetchBoards, putNewBoard, putNewTask, 
+import { archiveMultipleTasksByStatus, createNewStatus, deleteBoard, deleteMultipleTasksByStatus, deleteSingleTask, fetchBoardTasks, fetchBoards, putNewBoard, putNewTask, 
   updateTaskStatusById, 
   updateTaskStatusByStatus } from './asyncTasks';
 import { ITask } from '@/lib/interfaces';
@@ -25,6 +25,13 @@ export const createNewStatusAsync = createAsyncThunk(
   async (payload: { title: string; color: string, boardId: string }) => {
     const response = await createNewStatus(payload);
     return response;
+  }
+);
+
+export const deleteBoardAsync = createAsyncThunk(
+  "board/deleteBoardAsync",
+  async (boardId: string) => {
+    return deleteBoard(boardId);
   }
 );
 
@@ -88,15 +95,7 @@ export const archiveMultipleTasksByStatusAsync = createAsyncThunk(
 );
 
 
-// export const deleteBoardAsync = createAsyncThunk(
-//   "board/deleteBoardAsync",
-//   async (boardId: string) => {
-//     const payload = {
-//       boardId: boardId,
-//     };
-//     return deleteBoard(payload);
-//   }
-// );
+
 
 // export const createNewStatusAsync = createAsyncThunk(
 //   "board/createNewStatusAsync",

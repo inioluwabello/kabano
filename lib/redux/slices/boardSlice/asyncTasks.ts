@@ -1,8 +1,8 @@
 import addData from "@/lib/firebase/firestore/addData";
-import { deleteFromArray, deleteWhere, deleteWhereMultiple } from "@/lib/firebase/firestore/deleteData";
+import { deleteDocumentById, deleteFromArray, deleteWhere, deleteWhereMultiple } from "@/lib/firebase/firestore/deleteData";
 import { getCollection, getCollectionWhere } from "@/lib/firebase/firestore/getData";
 import { updateToArrayInDocument, updateWhere } from "@/lib/firebase/firestore/updateData";
-import { IBoard, IStatus, ITask, ITaskResult, WhereClause } from "@/lib/interfaces";
+import { IBoard, IStatus, ITask, IAsyncResult, WhereClause } from "@/lib/interfaces";
 import { nanoid } from "@reduxjs/toolkit";
 
 const BOARD_COLLECTION = 'boards'
@@ -31,25 +31,25 @@ export const createNewStatus = async (payload: { title: string; color: string, b
       status: payload.title,
     }
     const result = (await updateToArrayInDocument(
-        BOARD_COLLECTION,
-        payload.boardId, 
-        'statuses', 
-        status));
+      BOARD_COLLECTION,
+      payload.boardId,
+      'statuses',
+      status));
 
     return { success: result.success, status, error: result.error };
   } catch (error) {
     console.error('Error creating a new task:', error);
-    return { success:false, error };
+    return { success: false, error };
   }
 };
 
-export const fetchBoards = async (userId: string): Promise<ITaskResult> => {
+export const fetchBoards = async (userId: string): Promise<IAsyncResult> => {
   try {
-    
+
     const whereClause: WhereClause = {
       field: 'userId',
       comparison: '==',
-      value:userId
+      value: userId
     }
     const { success, data, error } = (await getCollectionWhere(BOARD_COLLECTION, [whereClause]))
     if (data) {
@@ -66,6 +66,34 @@ export const fetchBoards = async (userId: string): Promise<ITaskResult> => {
   }
 }
 
+export const deleteBoard = async (boardId: string): Promise<IAsyncResult> => {
+  try {
+
+    const boardComparison: WhereClause = {
+      field: 'boardId',
+      comparison: '==',
+      value: boardId
+    };
+
+    // delete from tasks
+    let result1 = (await deleteWhereMultiple(TASK_COLLECTION, [boardComparison]))
+
+    // delete status from board.statuses array
+    let result2 = (await deleteDocumentById(BOARD_COLLECTION, boardId));
+
+    return {
+      success: (result1.success ? result1.success : false) && (result2.success ? result2.success : false),
+      data: boardId,
+      error: { error1: result1.error, error2: result2.error }
+    };
+  } catch (error) {
+    // Handle network or other errors here
+    console.error("Error deleting tasks:", error);
+    return { success: false, error };
+  }
+}
+
+
 // TASKS
 export const putNewTask = async (payload: {
   task: ITask
@@ -80,7 +108,7 @@ export const putNewTask = async (payload: {
   }
 };
 
-export const fetchBoardTasks = async (boardId: string): Promise<ITaskResult> => {
+export const fetchBoardTasks = async (boardId: string): Promise<IAsyncResult> => {
   try {
 
     const whereClause: WhereClause[] = [{
@@ -98,8 +126,8 @@ export const fetchBoardTasks = async (boardId: string): Promise<ITaskResult> => 
       let result: ITask[] = data!.map(r => ({
         id: r.id, ...r.data
       }))
-      
-      return { data: result, success, error};
+
+      return { data: result, success, error };
     } else {
       return { success, error };
     }
@@ -165,27 +193,27 @@ export const updateTaskStatusByStatus = async (boardId: string, oldStatus: strin
       comparison: '==',
       value: oldStatus
     }], 'status', newStatus)).success!
-    return {success: result, oldStatus, newStatus};
+    return { success: result, oldStatus, newStatus };
   } catch (error) {
     // Handle network or other errors here
     console.error("Error updating tasks by status:", error);
-    return {success: false, error};
+    return { success: false, error };
   }
 };
 
 export const updateTaskStatusById = async (taskId: string, status: string): Promise<any> => {
   try {
     let result: boolean = (await updateWhere(TASK_COLLECTION, [
-    {
-      field: 'id',
-      comparison: '==',
-      value: taskId
-    }], 'status', status)).success!
-    return { success: result, taskId, status};
+      {
+        field: 'id',
+        comparison: '==',
+        value: taskId
+      }], 'status', status)).success!
+    return { success: result, taskId, status };
   } catch (error) {
     // Handle network or other errors here
     console.error("Error updating tasks by status:", error);
-    return {success: false, error};
+    return { success: false, error };
   }
 };
 
@@ -224,17 +252,6 @@ const generateBoardId = (title: string) => {
 
 
 
-
-
-// const API_URL = "http://localhost:3001";
-
-//     return await response.json();
-//   } catch (error) {
-//     // Handle network or other errors here
-//     console.error("Error fetching board tasks:", error);
-//     return [];
-//   }
-// };
 
 // export const putNewTask = async (payload: {task: ITask, boardId: string}) => {
 //   try {
@@ -339,11 +356,11 @@ const generateBoardId = (title: string) => {
 // };
 
 // export const updateTaskByStatus = async (
-//   payload: { 
+//   payload: {
 //     boardId: string, oldStatus: string, newStatus: string, color?: string
 //   }) => {
 //   try {
-//     const response = 
+//     const response =
 //       await fetch(`${API_URL}/api/boards/${payload.boardId}/status/${payload.oldStatus}/${payload.newStatus}/${payload.color}`, {
 //       method: 'PUT',
 //       headers: { 'Content-Type': 'application/json' },

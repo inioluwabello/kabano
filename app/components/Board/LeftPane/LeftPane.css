@@ -168,3 +168,10 @@
     background: var(--main-purple);
     color: var(--white) !important;
 }
+.board-list-text {
+    width: calc(100% - 3em);
+}
+.board-list-title {
+    display: block;
+    width: 100%;
+}
