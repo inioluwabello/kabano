@@ -20,7 +20,7 @@
 
 /* Define the track color */
 ::-webkit-scrollbar-track {
-  background-color: #2B2C37;
+  background-color: #2b2c3745;
   border-radius: 4px;
 }
 
@@ -156,7 +156,7 @@ a {
 .light .hoverable:hover,
 .light .board-list-item:hover,
 .light .hide-sidebar-btn:hover {
-  background: var(--main-purple-10);
+  background: var(--main-purple-hover);;
   color: var(--main-purple);
 }
 
@@ -248,7 +248,7 @@ a {
 }
 
 .light .task-card {
-  background: var(--grey-bg);
+  background: var(--white);
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
 }
 
@@ -293,8 +293,13 @@ a {
   background: none;
   border: 0;
   margin-top: 2em;
-  color: #ffffff;
   font-size: 12px;
+}
+
+.dark .new-task {
+  color: #ffffff;
+}.light .new-task {
+  color: var(--dark-grey);
 }
 
 .new-task-inline {
@@ -408,12 +413,17 @@ a {
 .modal {
   max-width: 400px;
   width: 100%;
-  background: var(--dark-grey);
   padding: 1em;
   border-radius: 5px;
   box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 3px, rgba(0, 0, 0, 0.5) 0px 1px 2px;
   max-height: calc(100vh - 3em);
   overflow: auto;
+}
+
+.dark .modal {
+  background: var(--dark-grey);
+}.light .modal {
+  background: var(--white);
 }
 
 .close-btn:hover {

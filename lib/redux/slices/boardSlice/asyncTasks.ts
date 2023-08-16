@@ -138,16 +138,9 @@ export const fetchBoardTasks = async (boardId: string): Promise<IAsyncResult> =>
 
 export const deleteSingleTask = async (taskId: string): Promise<any> => {
   try {
-
-    // TODO: Fetch boards by userId
-    let result: boolean = (await deleteWhere(TASK_COLLECTION, {
-      field: 'id',
-      comparison: '==',
-      value: taskId
-    })).success!
-    return { success: result, taskId };
+    const { data, success, error } = (await deleteDocumentById(TASK_COLLECTION, taskId))
+    return { data, success, error };
   } catch (error) {
-    // Handle network or other errors here
     console.error("Error deleting task:", error);
     return { success: false, error };
   }

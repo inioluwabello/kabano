@@ -1,5 +1,5 @@
 import { ITask } from "@/lib/interfaces";
-import { deleteSingleTaskAsync, useDispatch } from "@/lib/redux";
+import { deleteSingleTaskAsync, selectTheme, useDispatch, useSelector } from "@/lib/redux";
 import { useState } from 'react'
 
 interface TakListProps {
@@ -7,6 +7,8 @@ interface TakListProps {
 }
 
 export const TaskCard = ({ task }: TakListProps) => {
+
+    const theme = useSelector(selectTheme);
 
     const dispatch = useDispatch();
     const onDragStart = (e: React.DragEvent<HTMLDivElement>, task: ITask) => {
@@ -27,7 +29,7 @@ export const TaskCard = ({ task }: TakListProps) => {
                 {
                     taskIconVisible && 
                     (
-                        <img src="/assets/icon-cross.svg" alt="Cross"
+                        <img src={`/assets/icon-cross${theme === 'light' ? '-alt' : ''}.svg`} alt="Cross"
                             style={{
                                 width: '11px', height: '11px', position: "relative",  top: "4px"
                             }}

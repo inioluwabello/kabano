@@ -1,5 +1,5 @@
 import { IStatus, ITask } from "@/lib/interfaces";
-import { createNewTaskAsync, modalSlice, useDispatch } from "@/lib/redux";
+import { createNewTaskAsync, modalSlice, selectTheme, useDispatch, useSelector } from "@/lib/redux";
 import { useState } from "react"
 
 export const NewTaskModal = ({ statusOptions, boardId }: { statusOptions: IStatus[], boardId: string }) => {
@@ -66,13 +66,17 @@ export const NewTaskModal = ({ statusOptions, boardId }: { statusOptions: IStatu
     }
 
     const dispatch = useDispatch();
+    const theme = useSelector(selectTheme);
 
     return (
         <div className="overlay flex">
             <div className="modal">
                 <div className="space-between">
                     <div className="modal-title">Add New Task</div>
-                    <img className="pointer close-btn" width={16} height={16} onClick={() => dispatch(modalSlice.actions.setState(false))} src="/assets/icon-cross.svg" alt="" />
+                    <img className="pointer close-btn" 
+                        width={16} height={16} 
+                        onClick={() => dispatch(modalSlice.actions.setState(false))} 
+                        src={`/assets/icon-cross${theme === 'light' ? '-alt' : ''}.svg`} alt="" />
                 </div>
                 <div className="modal-body">
                     {/* Title */}

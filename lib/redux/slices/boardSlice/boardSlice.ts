@@ -54,7 +54,7 @@ export const boardSlice = createSlice({
         state.status = 'loading';
       })
       .addCase(getBoardsAsync.fulfilled, (state, action: PayloadAction<IAsyncResult>) => {
-
+        state.status = 'idle';
         const { success, error, data } = action.payload;
         if (success === true) {
           state.boards = data as IBoard[];
@@ -65,8 +65,6 @@ export const boardSlice = createSlice({
         if (error) {
           console.log(error)
         }
-
-        state.status = 'idle';
       })
       .addCase(deleteBoardAsync.pending, (state) => {
         state.status = 'loading';
@@ -125,10 +123,12 @@ export const boardSlice = createSlice({
       .addCase(deleteSingleTaskAsync.pending, (state) => {
         state.status = 'loading';
       })
-      .addCase(deleteSingleTaskAsync.fulfilled, (state, action: PayloadAction<any>) => {
+      .addCase(deleteSingleTaskAsync.fulfilled, (state, action: PayloadAction<IAsyncResult>) => {
         state.status = 'idle';
-        if (action.payload.success === true) {
-          state.tasks = state.tasks.filter(t => t.id !== action.payload.taskId)
+        const { data, success, error } = action.payload;
+        if (success === true) {
+          const taskId = data as string;
+          state.tasks = state.tasks.filter(t => t.id !== taskId)
         }
       })
 

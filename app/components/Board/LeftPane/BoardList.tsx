@@ -2,6 +2,7 @@ import { IBoard } from "@/lib/interfaces"
 import { BoardListItem } from "./BoardListItem"
 import { createNewBoardAsync, getSelectedBoard, useDispatch, useSelector } from "@/lib/redux";
 import { useEffect, useRef, useState } from "react";
+import { useAuthContext } from "@/lib/context/AuthContext";
 
 export const BoardList = ({ boards }: { boards: IBoard[] }) => {
     const selectedBoard = useSelector(getSelectedBoard)
@@ -9,6 +10,8 @@ export const BoardList = ({ boards }: { boards: IBoard[] }) => {
 
     const newBoardRef = useRef<HTMLInputElement>(null)
     const [newBoardEditorVisible, setNewEditorVisibility] = useState(false);
+
+    const { user } = useAuthContext();
 
     useEffect(() => {
         // Focus the input element when newBoardEditorVisible is set to true
@@ -31,7 +34,8 @@ export const BoardList = ({ boards }: { boards: IBoard[] }) => {
 
         if (newBoardName.trim() !== '' && e.key === 'Enter') {
             const payload = {
-                title: newBoardName
+                title: newBoardName,
+                userId: user!.userId
             }
             dispatch(createNewBoardAsync(payload))
             setNewBoardName('')
