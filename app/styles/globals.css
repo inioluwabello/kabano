@@ -157,7 +157,7 @@ a {
 .light .board-list-item:hover,
 .light .hide-sidebar-btn:hover {
   background: var(--main-purple-hover);;
-  color: var(--main-purple);
+  color: var(--white);
 }
 
 .dark .hoverable:hover,

@@ -1,5 +1,5 @@
 import { IBoard } from "@/lib/interfaces";
-import { boardSlice, deleteBoardAsync, useDispatch } from "@/lib/redux";
+import { boardSlice, deleteBoardAsync, selectTheme, useDispatch, useSelector } from "@/lib/redux";
 import { useState } from "react";
 
 export const BoardListItem = ({ board, selected }: { board: IBoard, selected: boolean }) => {
@@ -13,6 +13,8 @@ export const BoardListItem = ({ board, selected }: { board: IBoard, selected: bo
     const handleDeleteClick = (boardId: string) => {
         dispatch(deleteBoardAsync(boardId))
     }
+
+    const theme = useSelector(selectTheme)
 
     return (
         <div className={`board-list-item pointer flex ${selected ? 'selected' : ''}`} 
@@ -32,7 +34,7 @@ export const BoardListItem = ({ board, selected }: { board: IBoard, selected: bo
                         className="pointer inline-btn pry-text"
                         onClick={() => handleDeleteClick(board.id)}
                         style={{ marginRight: "-1em" }}>
-                        <img src="/assets/icon-cross-alt.svg" width={10} height={10} alt="close" />
+                            <img src={`/assets/icon-cross${theme === 'light' ? '' : '-alt'}.svg`} width={10} height={10} alt="close" />
                     </button>
                 }
             </div>
