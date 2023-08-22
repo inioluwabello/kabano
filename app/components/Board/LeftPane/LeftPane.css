@@ -17,6 +17,7 @@
     font-size: 12px;
     position: relative;
     height: 100vh;
+    width: 251px;
 }
 .light .leftPane {background: var(--light-grey);}
 .mid-left-pane {

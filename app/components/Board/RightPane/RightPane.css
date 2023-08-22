@@ -23,7 +23,10 @@
     height: 52.5px;
     position: fixed;
     top: 0;
-    width: 100%;
+    width: calc(100vw - 251px);
+}
+.left-pane-not-visible.topPane {
+    width: 100vw;
 }
 .right-pane {
     width: 100%;

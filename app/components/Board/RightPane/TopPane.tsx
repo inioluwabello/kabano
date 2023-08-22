@@ -1,5 +1,5 @@
 import { IBoard } from "@/lib/interfaces"
-import { boardSlice, deleteBoardAsync, logoutAsync, modalSlice, useDispatch } from "@/lib/redux";
+import { deleteBoardAsync, logoutAsync, modalSlice, selectLeftPaneVisibility, useDispatch, useSelector } from "@/lib/redux";
 import { RefObject, useEffect, useState } from "react";
 
 export const TopPane = ({ board, topMenuActionsRef }: 
@@ -28,9 +28,9 @@ export const TopPane = ({ board, topMenuActionsRef }:
         }
     }
 
-
+    const isLeftPaneVisible = useSelector(selectLeftPaneVisibility)
     return (
-        <div className={`pane topPane space-between border-bottom`}>
+        <div className={`pane topPane space-between border-bottom ${isLeftPaneVisible ? '' : 'left-pane-not-visible'}`}>
             <h3 className={`paneTitle`}>{board ? board.title : `No Board Selected`}</h3>
             <div className="top-bar-actions">
                 <div className="flex ac">
