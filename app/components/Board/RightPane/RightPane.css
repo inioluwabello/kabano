@@ -21,6 +21,9 @@
     padding: 0.7rem;
     align-items: center;
     height: 52.5px;
+    position: fixed;
+    top: 0;
+    width: 100%;
 }
 .right-pane {
     width: 100%;

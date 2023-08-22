@@ -16,7 +16,7 @@ export const LeftPane = memo(({ boards }: { boards: IBoard[] }) => {
     };
 
     return (
-        <div className="left-page-content leftPane">
+        <div className={`left-page-content leftPane ${!isLeftPaneVisible ? 'left-pane-not-visible' : ''}`}>
             <div className={`pane ${isLeftPaneVisible ? '' : 'border-bottom'} border-right logo-wrapper`}>
                 <Logo />
             </div>

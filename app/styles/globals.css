@@ -203,7 +203,8 @@ a {
 }
 .task-board {
   padding: 1em;
-  height: calc(100vh - 54px);
+  height: calc(100vh - 70px);
+  margin-top: 52.4px;
 }
 
 .alt-pry-text{

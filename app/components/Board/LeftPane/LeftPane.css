@@ -175,3 +175,10 @@
     display: block;
     width: 100%;
 }
+.left-pane-not-visible {
+    width: 0;
+}
+
+.left-pane-not-visible > .logo-wrapper {
+    width: 200px;
+}
