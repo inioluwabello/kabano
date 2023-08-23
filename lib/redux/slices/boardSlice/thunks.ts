@@ -2,12 +2,12 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { archiveMultipleTasksByStatus, createNewStatus, deleteBoard, deleteMultipleTasksByStatus, deleteSingleTask, fetchBoardTasks, fetchBoards, putNewBoard, putNewTask, 
   updateTaskStatusById, 
   updateTaskStatusByStatus } from './asyncTasks';
-import { ITask } from '@/lib/interfaces';
+import { IStatus, ITask } from '@/lib/interfaces';
 
 // BOARDS
 export const createNewBoardAsync = createAsyncThunk(
   "board/createNewBoardAsync",
-  async (payload: { title: string }) => {
+  async (payload: { title: string, isArchived: boolean, userId: string }) => {
     return putNewBoard(payload);
   }
 );
@@ -88,7 +88,7 @@ export const updateTaskStatusByIdAsync = createAsyncThunk(
 
 export const archiveMultipleTasksByStatusAsync = createAsyncThunk(
   "board/archiveMultipleTasksByStatusAsync",
-  async (payload: { boardId: string, status: string }) => {
+  async (payload: { boardId: string, status: IStatus }) => {
     const response = await archiveMultipleTasksByStatus(payload.boardId, payload.status);
     return response;
   }

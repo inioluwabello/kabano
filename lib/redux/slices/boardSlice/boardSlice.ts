@@ -173,7 +173,9 @@ export const boardSlice = createSlice({
       })
       .addCase(archiveMultipleTasksByStatusAsync.fulfilled, (state, action: PayloadAction<any>) => {
         state.status = 'idle';
+        console.log(action.payload)
         if (action.payload.success === true) {
+          state.selectedBoard!.statuses = state.selectedBoard!.statuses.filter(t => t.id !== action.payload.status.id)
           state.tasks = state.tasks.filter(t => t.status !== action.payload.status)
         }
       })

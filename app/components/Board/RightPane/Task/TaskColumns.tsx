@@ -141,7 +141,7 @@ export const TaskColumns = ({
 
             {showingStatusActions &&
                 <div ref={statusActionsRef}>
-                    <StatusActions boardId={board!.id} status={status.status} onCloseDropdown={onCloseDropdown} />
+                    <StatusActions boardId={board!.id} status={status} onCloseDropdown={onCloseDropdown} />
                 </div>
             }
 

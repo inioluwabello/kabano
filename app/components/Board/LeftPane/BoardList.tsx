@@ -35,7 +35,8 @@ export const BoardList = ({ boards }: { boards: IBoard[] }) => {
         if (newBoardName.trim() !== '' && e.key === 'Enter') {
             const payload = {
                 title: newBoardName,
-                userId: user!.userId
+                userId: user!.userId as string,
+                isArchived: false
             }
             dispatch(createNewBoardAsync(payload))
             setNewBoardName('')

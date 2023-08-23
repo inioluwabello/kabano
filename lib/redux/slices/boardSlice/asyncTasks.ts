@@ -1,7 +1,7 @@
 import addData from "@/lib/firebase/firestore/addData";
-import { deleteDocumentById, deleteFromArray, deleteWhere, deleteWhereMultiple } from "@/lib/firebase/firestore/deleteData";
-import { getCollection, getCollectionWhere } from "@/lib/firebase/firestore/getData";
-import { updateToArrayInDocument, updateWhere } from "@/lib/firebase/firestore/updateData";
+import { deleteDocumentById, deleteFromArray, deleteWhereMultiple } from "@/lib/firebase/firestore/deleteData";
+import { getCollectionWhere } from "@/lib/firebase/firestore/getData";
+import { archiveBoardStatus, updateToArrayInDocument, updateWhere } from "@/lib/firebase/firestore/updateData";
 import { IBoard, IStatus, ITask, IAsyncResult, WhereClause } from "@/lib/interfaces";
 import { nanoid } from "@reduxjs/toolkit";
 
@@ -9,7 +9,7 @@ const BOARD_COLLECTION = 'boards'
 const TASK_COLLECTION = 'tasks'
 
 // BOARDS
-export const putNewBoard = async (payload: { title: string; }) => {
+export const putNewBoard = async (payload: { title: string; userId:string; isArchived: boolean }) => {
   try {
     // TODO: Add boards with userId
     const { id, data } = await addData(BOARD_COLLECTION, generateBoardId(payload.title), payload);
@@ -46,12 +46,17 @@ export const createNewStatus = async (payload: { title: string; color: string, b
 export const fetchBoards = async (userId: string): Promise<IAsyncResult> => {
   try {
 
-    const whereClause: WhereClause = {
+    const userClause: WhereClause = {
       field: 'userId',
       comparison: '==',
       value: userId
     }
-    const { success, data, error } = (await getCollectionWhere(BOARD_COLLECTION, [whereClause]))
+    const archivedClause: WhereClause = {
+      field: 'isArchived',
+      comparison: '==',
+      value: false
+    }
+    const { success, data, error } = (await getCollectionWhere(BOARD_COLLECTION, [userClause, archivedClause]))
     if (data) {
       let result: IBoard[] = data!.map(r => ({
         id: r.id, ...r.data
@@ -210,20 +215,27 @@ export const updateTaskStatusById = async (taskId: string, status: string): Prom
   }
 };
 
-export const archiveMultipleTasksByStatus = async (boardId: string, status: string): Promise<any> => {
+export const archiveMultipleTasksByStatus = async (boardId: string, status: IStatus): Promise<any> => {
   try {
 
-    let result: boolean = (await updateWhere(TASK_COLLECTION, [{
+    const boardComparison: WhereClause = {
       field: 'boardId',
       comparison: '==',
       value: boardId
-    },
-    {
+    };
+
+    let result1: boolean = (await updateWhere(TASK_COLLECTION, [boardComparison, {
       field: 'status',
       comparison: '==',
       value: status
     }], 'isArchived', true)).success!
-    return { success: result, boardId, status };
+
+    let result2: boolean = (await archiveBoardStatus(BOARD_COLLECTION, boardComparison, status.id)).success!;
+
+    console.log(`result1: ${result1}`)
+    console.log(`result2: ${result2}`)
+
+    return { success: result1 && result2, boardId, status };
   } catch (error) {
     // Handle network or other errors here
     console.error("Error archiving tasks:", error);

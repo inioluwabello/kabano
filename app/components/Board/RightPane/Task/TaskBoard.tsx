@@ -43,7 +43,7 @@ export const TaskBoard = memo(({ board }: { board?: IBoard }) => {
                                     board={board}
                                     tasks={tasks}
                                     status={status}
-                                    statusArray={board.statuses!} />
+                                    statusArray={board.statuses!.filter(s => s.isArchived !== true)} />
                             )
                         })}
 

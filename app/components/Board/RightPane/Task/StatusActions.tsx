@@ -1,6 +1,7 @@
+import { IStatus } from "@/lib/interfaces";
 import { archiveMultipleTasksByStatusAsync, deleteMultipleTasksByStatusAsync, useDispatch } from "@/lib/redux"
 
-export const StatusActions = ({ boardId, status, onCloseDropdown }: { boardId: string, status: string, onCloseDropdown: () => void }) => {
+export const StatusActions = ({ boardId, status, onCloseDropdown }: { boardId: string, status: IStatus, onCloseDropdown: () => void }) => {
     
     const dispatch = useDispatch();
     const deleteTaskInStatus = async (status: string) => {
@@ -13,7 +14,7 @@ export const StatusActions = ({ boardId, status, onCloseDropdown }: { boardId: s
         await dispatch(deleteMultipleTasksByStatusAsync(payload));
     }
 
-    const archiveTaskInStatus = async (status: string) => {
+    const archiveTaskInStatus = async (status: IStatus) => {
         const payload = {
             boardId: boardId,
             status: status,
@@ -31,7 +32,7 @@ export const StatusActions = ({ boardId, status, onCloseDropdown }: { boardId: s
                     <li className="pointer" onClick={() => archiveTaskInStatus(status)}>
                         {/* <FontAwesomeIcon icon={faArchive} />  */}Archive
                     </li>
-                    <li className="pointer" onClick={() => deleteTaskInStatus(status)}>
+                    <li className="pointer" onClick={() => deleteTaskInStatus(status.status)}>
                         {/* <FontAwesomeIcon icon={faTrash} />  */}Delete
                     </li>
                 </ul>
